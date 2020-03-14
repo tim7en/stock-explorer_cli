@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import * as messageType from '../shared/messageType';
-import {  IndividualConfig } from 'ngx-toastr';
+import { IndividualConfig, ToastrService } from 'ngx-toastr';
 import { Config } from '../models/config';
 
 @Injectable({
@@ -13,7 +13,7 @@ import { Config } from '../models/config';
 export class GetmarketserviceService {
 
   public get baseURL() { return "https://www.alphavantage.co/query?function="; }
-  //private messager: ToastrService;
+  private messager: ToastrService;
   constructor(private http: HttpClient) {
     this.showConfig();
   }
@@ -55,7 +55,7 @@ export class GetmarketserviceService {
     try {
       let options: Partial<IndividualConfig> = null;
       if (timeout) options = { timeOut: timeout };
-      //this.messager.show(msg, title, options, mType)
+      this.messager.show(msg, title, options, mType)
     }
     catch (e) {
     }
