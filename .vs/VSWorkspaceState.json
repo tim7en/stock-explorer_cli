@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\app",
+    "\\src\\app\\models",
+    "\\src\\app\\services",
+    "\\src\\app\\shared",
+    "\\src\\assets"
+  ],
+  "SelectedNode": "\\src\\app\\services\\getmarketservice.service.ts",
+  "PreviewInSolutionExplorer": false
+}
