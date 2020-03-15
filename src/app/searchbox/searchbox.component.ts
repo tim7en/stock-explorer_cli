@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { GetmarketserviceService } from '../services/getmarketservice.service';
@@ -8,12 +8,17 @@ import { GetmarketserviceService } from '../services/getmarketservice.service';
 export interface SearchSYM {
   symbol: string;
   name: string;
-  lastsale: number;
-  MarketCap: number;
-  IPOyear: number;
-  Sector: string;
-  Industry: string;
-  Exchange: string;
+  sector: string;
+}
+
+interface quote {
+  name: string;
+  description: string;
+  apiname: string;
+}
+
+interface num {
+  value: number;
 }
 
 @Component({
@@ -26,4651 +31,2574 @@ export class SearchboxComponent implements OnInit {
   filteredOptions: Observable<SearchSYM[]>;
   marketService;
   options: SearchSYM[] = [
+    //sp500
       {
-        symbol: "CQP",
-        name: "Cheniere Energy Partners, LP",
-        lastsale: 45.11,
-        MarketCap: 21830000000,
-        IPOyear: 2007,
-        Sector: "Public Utilities",
-        Industry: "Oil/Gas Transmission",
-        Exchange: "AMEX"
+        symbol: "MMM",
+        name: "3M Company",
+        sector: "Industrials"
       },
       {
-        symbol: "AAPL",
-        name: "Apple Inc.",
-        lastsale: 213.04,
-        MarketCap: 980210000000,
-        IPOyear: 1980,
-        Sector: "Technology",
-        Industry: "Computer Manufacturing",
-        Exchange: "NASDAQ"
+        symbol: "AOS",
+        name: "A.O. Smith Corp",
+        sector: "Industrials"
       },
       {
-        symbol: "ADBE",
-        name: "Adobe Inc.",
-        lastsale: 298.86,
-        MarketCap: 145080000000,
-        IPOyear: 1986,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "AGNC",
-        name: "AGNC Investment Corp.",
-        lastsale: 17.14,
-        MarketCap: 9390000000,
-        IPOyear: 2008,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "AKAM",
-        name: "Akamai Technologies, Inc.",
-        lastsale: 88.13,
-        MarketCap: 14370000000,
-        IPOyear: 1999,
-        Sector: "Miscellaneous",
-        Industry: "Business Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "ALGN",
-        name: "Align Technology, Inc.",
-        lastsale: 209.08,
-        MarketCap: 16730000000,
-        IPOyear: 2001,
-        Sector: "Health Care",
-        Industry: "Industrial Specialties",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "ALNY",
-        name: "Alnylam Pharmaceuticals, Inc.",
-        lastsale: 77.59,
-        MarketCap: 8270000000,
-        IPOyear: 2004,
-        Sector: "Health Care",
-        Industry: "Major Pharmaceuticals",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "ALXN",
-        name: "Alexion Pharmaceuticals, Inc.",
-        lastsale: 113.29,
-        MarketCap: 25400000000,
-        IPOyear: 1996,
-        Sector: "Health Care",
-        Industry: "Major Pharmaceuticals",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "AMAT",
-        name: "Applied Materials, Inc.",
-        lastsale: 49.37,
-        MarketCap: 46220000000,
-        IPOyear: 1972,
-        Sector: "Technology",
-        Industry: "Semiconductors",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "AMGN",
-        name: "Amgen Inc.",
-        lastsale: 186.58,
-        MarketCap: 113800000000,
-        IPOyear: 1983,
-        Sector: "Health Care",
-        Industry: "Biotechnology: Biological Products (No Diagnostic Substances)",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "AMTD",
-        name: "TD Ameritrade Holding Corporation",
-        lastsale: 51.1,
-        MarketCap: 28270000000,
-        IPOyear: 1997,
-        Sector: "Finance",
-        Industry: "Investment Bankers/Brokers/Service",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "AMZN",
-        name: "Amazon.com, Inc.",
-        lastsale: 1866.78,
-        MarketCap: 923410000000,
-        IPOyear: 1997,
-        Sector: "Consumer Services",
-        Industry: "Catalog/Specialty Distribution",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "ANSS",
-        name: "ANSYS, Inc.",
-        lastsale: 203.12,
-        MarketCap: 17050000000,
-        IPOyear: 1996,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "ARGX",
-        name: "argenx SE",
-        lastsale: 140.46,
-        MarketCap: 5340000000,
-        IPOyear: 2017,
-        Sector: "Health Care",
-        Industry: "Biotechnology: Biological Products (No Diagnostic Substances)",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "ASML",
-        name: "ASML Holding N.V.",
-        lastsale: 222.81,
-        MarketCap: 93830000000,
-        IPOyear: 1995,
-        Sector: "Technology",
-        Industry: "Industrial Machinery/Components",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "ASND",
-        name: "Ascendis Pharma A/S",
-        lastsale: 115.76,
-        MarketCap: 5500000000,
-        IPOyear: 2015,
-        Sector: "Health Care",
-        Industry: "Major Pharmaceuticals",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "AVGO",
-        name: "Broadcom Inc.",
-        lastsale: 289.99,
-        MarketCap: 115440000000,
-        IPOyear: 2009,
-        Sector: "Technology",
-        Industry: "Semiconductors",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "AZPN",
-        name: "Aspen Technology, Inc.",
-        lastsale: 131.87,
-        MarketCap: 9090000000,
-        IPOyear: 1994,
-        Sector: "Technology",
-        Industry: "EDP Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "BGNE",
-        name: "BeiGene, Ltd.",
-        lastsale: 137.34,
-        MarketCap: 8230000000,
-        IPOyear: 2016,
-        Sector: "Health Care",
-        Industry: "Major Pharmaceuticals",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "BIDU",
-        name: "Baidu, Inc.",
-        lastsale: 111.7,
-        MarketCap: 39100000000,
-        IPOyear: 2005,
-        Sector: "Technology",
-        Industry: "Computer Software: Programming, Data Processing",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "BLUE",
-        name: "bluebird bio, Inc.",
-        lastsale: 131.23,
-        MarketCap: 7230000000,
-        IPOyear: 2013,
-        Sector: "Health Care",
-        Industry: "Biotechnology: Biological Products (No Diagnostic Substances)",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "BMRN",
-        name: "BioMarin Pharmaceutical Inc.",
-        lastsale: 79.32,
-        MarketCap: 14200000000,
-        IPOyear: 1999,
-        Sector: "Health Care",
-        Industry: "Major Pharmaceuticals",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "BYND",
-        name: "Beyond Meat, Inc.",
-        lastsale: 196.51,
-        MarketCap: 11830000000,
-        IPOyear: 2019,
-        Sector: "Consumer Non-Durables",
-        Industry: "Packaged Foods",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "CACC",
-        name: "Credit Acceptance Corporation",
-        lastsale: 478.03,
-        MarketCap: 8990000000,
-        IPOyear: 1992,
-        Sector: "Finance",
-        Industry: "Finance: Consumer Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "CASY",
-        name: "Caseys General Stores, Inc.",
-        lastsale: 161.91,
-        MarketCap: 5950000000,
-        IPOyear: 1983,
-        Sector: "Consumer Durables",
-        Industry: "Automotive Aftermarket",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "CDW",
-        name: "CDW Corporation",
-        lastsale: 118.16,
-        MarketCap: 17250000000,
-        IPOyear: 2013,
-        Sector: "Consumer Services",
-        Industry: "Catalog/Specialty Distribution",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "CELG",
-        name: "Celgene Corporation",
-        lastsale: 91.86,
-        MarketCap: 65100000000,
-        IPOyear: 1987,
-        Sector: "Health Care",
-        Industry: "Major Pharmaceuticals",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "CERN",
-        name: "Cerner Corporation",
-        lastsale: 71.65,
-        MarketCap: 22810000000,
-        IPOyear: 1986,
-        Sector: "Technology",
-        Industry: "EDP Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "CG",
-        name: "The Carlyle Group L.P.",
-        lastsale: 23.85,
-        MarketCap: 8030000000,
-        IPOyear: 2012,
-        Sector: "Finance",
-        Industry: "Investment Managers",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "CGNX",
-        name: "Cognex Corporation",
-        lastsale: 44.01,
-        MarketCap: 7510000000,
-        IPOyear: 1989,
-        Sector: "Capital Goods",
-        Industry: "Industrial Machinery/Components",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "CHKP",
-        name: "Check Point Software Technologies Ltd.",
-        lastsale: 111.95,
-        MarketCap: 17040000000,
-        IPOyear: 1996,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "CHRW",
-        name: "C.H. Robinson Worldwide, Inc.",
-        lastsale: 83.73,
-        MarketCap: 11430000000,
-        IPOyear: 1997,
-        Sector: "Transportation",
-        Industry: "Oil Refining/Marketing",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "CME",
-        name: "CME Group Inc.",
-        lastsale: 194.42,
-        MarketCap: 69600000000,
-        IPOyear: 2002,
-        Sector: "Finance",
-        Industry: "Investment Bankers/Brokers/Service",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "COLM",
-        name: "Columbia Sportswear Company",
-        lastsale: 105.98,
-        MarketCap: 7240000000,
-        IPOyear: 1998,
-        Sector: "Consumer Non-Durables",
-        Industry: "Apparel",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "CONE",
-        name: "CyrusOne Inc",
-        lastsale: 57.4,
-        MarketCap: 6500000000,
-        IPOyear: 2013,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "COUP",
-        name: "Coupa Software Incorporated",
-        lastsale: 135.71,
-        MarketCap: 8380000000,
-        IPOyear: 2016,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "CPRT",
-        name: "Copart, Inc.",
-        lastsale: 77.53,
-        MarketCap: 17760000000,
-        IPOyear: 1994,
-        Sector: "Consumer Durables",
-        Industry: "Automotive Aftermarket",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "CREE",
-        name: "Cree, Inc.",
-        lastsale: 62.18,
-        MarketCap: 6540000000,
-        IPOyear: 1993,
-        Sector: "Technology",
-        Industry: "Semiconductors",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "CSCO",
-        name: "Cisco Systems, Inc.",
-        lastsale: 55.4,
-        MarketCap: 237150000000,
-        IPOyear: 1990,
-        Sector: "Technology",
-        Industry: "Computer Communications Equipment",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "CSGP",
-        name: "CoStar Group, Inc.",
-        lastsale: 615.4,
-        MarketCap: 22490000000,
-        IPOyear: 1998,
-        Sector: "Miscellaneous",
-        Industry: "Business Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "CTAS",
-        name: "Cintas Corporation",
-        lastsale: 260.44,
-        MarketCap: 26690000000,
-        IPOyear: 1983,
-        Sector: "Consumer Non-Durables",
-        Industry: "Apparel",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "CTRP",
-        name: "Ctrip.com International, Ltd.",
-        lastsale: 38.98,
-        MarketCap: 21560000000,
-        IPOyear: 2003,
-        Sector: "Miscellaneous",
-        Industry: "Business Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "CTSH",
-        name: "Cognizant Technology Solutions Corporation",
-        lastsale: 65.14,
-        MarketCap: 37080000000,
-        IPOyear: 1998,
-        Sector: "Technology",
-        Industry: "EDP Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "CTXS",
-        name: "Citrix Systems, Inc.",
-        lastsale: 94.24,
-        MarketCap: 12410000000,
-        IPOyear: 1995,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "CY",
-        name: "Cypress Semiconductor Corporation",
-        lastsale: 22.97,
-        MarketCap: 8480000000,
-        IPOyear: 1986,
-        Sector: "Technology",
-        Industry: "Semiconductors",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "CYBR",
-        name: "CyberArk Software Ltd.",
-        lastsale: 138.88,
-        MarketCap: 5240000000,
-        IPOyear: 2014,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "CZR",
-        name: "Caesars Entertainment Corporation",
-        lastsale: 11.84,
-        MarketCap: 7980000000,
-        IPOyear: 2012,
-        Sector: "Consumer Services",
-        Industry: "Hotels/Resorts",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "DBX",
-        name: "Dropbox, Inc.",
-        lastsale: 23.56,
-        MarketCap: 9690000000,
-        IPOyear: 2018,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "DISH",
-        name: "DISH Network Corporation",
-        lastsale: 33.86,
-        MarketCap: 15910000000,
-        IPOyear: 1995,
-        Sector: "Consumer Services",
-        Industry: "Television Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "DLTR",
-        name: "Dollar Tree, Inc.",
-        lastsale: 101.75,
-        MarketCap: 24170000000,
-        IPOyear: 1995,
-        Sector: "Consumer Services",
-        Industry: "Department/Specialty Retail Stores",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "DNKN",
-        name: "Dunkin&#39; Brands Group, Inc.",
-        lastsale: 80.16,
-        MarketCap: 6620000000,
-        IPOyear: 2011,
-        Sector: "Consumer Services",
-        Industry: "Restaurants",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "DOCU",
-        name: "DocuSign, Inc.",
-        lastsale: 51.72,
-        MarketCap: 8990000000,
-        IPOyear: 2018,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "DXCM",
-        name: "DexCom, Inc.",
-        lastsale: 156.87,
-        MarketCap: 14280000000,
-        IPOyear: 2005,
-        Sector: "Health Care",
-        Industry: "Medical/Dental Instruments",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "EBAY",
-        name: "eBay Inc.",
-        lastsale: 41.19,
-        MarketCap: 34550000000,
-        IPOyear: 1998,
-        Sector: "Miscellaneous",
-        Industry: "Business Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "EEFT",
-        name: "Euronet Worldwide, Inc.",
-        lastsale: 155.91,
-        MarketCap: 8100000000,
-        IPOyear: 1997,
-        Sector: "Finance",
-        Industry: "Investment Bankers/Brokers/Service",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "ENTG",
-        name: "Entegris, Inc.",
-        lastsale: 43.51,
-        MarketCap: 5880000000,
-        IPOyear: 2000,
-        Sector: "Consumer Non-Durables",
-        Industry: "Plastic Products",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "EQIX",
-        name: "Equinix, Inc.",
-        lastsale: 502.1,
-        MarketCap: 42210000000,
-        IPOyear: 2000,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "ETSY",
-        name: "Etsy, Inc.",
-        lastsale: 67.02,
-        MarketCap: 8050000000,
-        IPOyear: 2015,
-        Sector: "Miscellaneous",
-        Industry: "Business Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "EXAS",
-        name: "Exact Sciences Corporation",
-        lastsale: 115.11,
-        MarketCap: 14910000000,
-        IPOyear: 2001,
-        Sector: "Health Care",
-        Industry: "Biotechnology: Commercial Physical & Biological Resarch",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "EXEL",
-        name: "Exelixis, Inc.",
-        lastsale: 21.27,
-        MarketCap: 6420000000,
-        IPOyear: 2000,
-        Sector: "Health Care",
-        Industry: "Biotechnology: Commercial Physical & Biological Resarch",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "FANG",
-        name: "Diamondback Energy, Inc.",
-        lastsale: 103.43,
-        MarketCap: 17030000000,
-        IPOyear: 2012,
-        Sector: "Energy",
-        Industry: "Oil & Gas Production",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "FAST",
-        name: "Fastenal Company",
-        lastsale: 30.8,
-        MarketCap: 17660000000,
-        IPOyear: 1987,
-        Sector: "Consumer Services",
-        Industry: "RETAIL: Building Materials",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "FB",
-        name: "Facebook, Inc.",
-        lastsale: 194.23,
-        MarketCap: 554130000000,
-        IPOyear: 2012,
-        Sector: "Technology",
-        Industry: "Computer Software: Programming, Data Processing",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "FFIV",
-        name: "F5 Networks, Inc.",
-        lastsale: 146.72,
-        MarketCap: 8820000000,
-        IPOyear: 1999,
-        Sector: "Technology",
-        Industry: "Computer Communications Equipment",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "FISV",
-        name: "Fiserv, Inc.",
-        lastsale: 105.43,
-        MarketCap: 71640000000,
-        IPOyear: 1986,
-        Sector: "Technology",
-        Industry: "EDP Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "FIVE",
-        name: "Five Below, Inc.",
-        lastsale: 117.46,
-        MarketCap: 6570000000,
-        IPOyear: 2012,
-        Sector: "Consumer Services",
-        Industry: "Department/Specialty Retail Stores",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "FLEX",
-        name: "Flex Ltd.",
-        lastsale: 11.15,
-        MarketCap: 5740000000,
-        IPOyear: 1994,
-        Sector: "Technology",
-        Industry: "Electrical Products",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "FLIR",
-        name: "FLIR Systems, Inc.",
-        lastsale: 49.66,
-        MarketCap: 6740000000,
-        IPOyear: 1993,
-        Sector: "Capital Goods",
-        Industry: "Industrial Machinery/Components",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "FSLR",
-        name: "First Solar, Inc.",
-        lastsale: 64.49,
-        MarketCap: 6790000000,
-        IPOyear: 2006,
-        Sector: "Technology",
-        Industry: "Semiconductors",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "FTNT",
-        name: "Fortinet, Inc.",
-        lastsale: 80.31,
-        MarketCap: 13710000000,
-        IPOyear: 2009,
-        Sector: "Technology",
-        Industry: "Computer peripheral equipment",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "GDS",
-        name: "GDS Holdings Limited",
-        lastsale: 41.18,
-        MarketCap: 5180000000,
-        IPOyear: 2016,
-        Sector: "Technology",
-        Industry: "Computer Software: Programming, Data Processing",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "GH",
-        name: "Guardant Health, Inc.",
-        lastsale: 93.99,
-        MarketCap: 8190000000,
-        IPOyear: 2018,
-        Sector: "Health Care",
-        Industry: "Medical Specialities",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "GILD",
-        name: "Gilead Sciences, Inc.",
-        lastsale: 65.52,
-        MarketCap: 83010000000,
-        IPOyear: 1992,
-        Sector: "Health Care",
-        Industry: "Biotechnology: Biological Products (No Diagnostic Substances)",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "GLPG",
-        name: "Galapagos NV",
-        lastsale: 173.4,
-        MarketCap: 9510000000,
-        IPOyear: 2015,
-        Sector: "Health Care",
-        Industry: "Major Pharmaceuticals",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "GMAB",
-        name: "Genmab A/S",
-        lastsale: 18.29,
-        MarketCap: 11850000000,
-        IPOyear: 2019,
-        Sector: "Health Care",
-        Industry: "Major Pharmaceuticals",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "GOOG",
-        name: "Alphabet Inc.",
-        lastsale: 1216.68,
-        MarketCap: 843640000000,
-        IPOyear: 2004,
-        Sector: "Technology",
-        Industry: "Computer Software: Programming, Data Processing",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "GRMN",
-        name: "Garmin Ltd.",
-        lastsale: 78.59,
-        MarketCap: 14920000000,
-        IPOyear: 2000,
-        Sector: "Capital Goods",
-        Industry: "Industrial Machinery/Components",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "HDS",
-        name: "HD Supply Holdings, Inc.",
-        lastsale: 40.51,
-        MarketCap: 6920000000,
-        IPOyear: 2013,
-        Sector: "Consumer Services",
-        Industry: "Office Equipment/Supplies/Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "HOLX",
-        name: "Hologic, Inc.",
-        lastsale: 51.25,
-        MarketCap: 13740000000,
-        IPOyear: 1990,
-        Sector: "Health Care",
-        Industry: "Medical Electronics",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "HQY",
-        name: "HealthEquity, Inc.",
-        lastsale: 81.98,
-        MarketCap: 5140000000,
-        IPOyear: 2014,
-        Sector: "Miscellaneous",
-        Industry: "Business Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "HSIC",
-        name: "Henry Schein, Inc.",
-        lastsale: 66.54,
-        MarketCap: 9920000000,
-        IPOyear: 1995,
-        Sector: "Health Care",
-        Industry: "Medical Specialities",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "HTHT",
-        name: "Huazhu Group Limited",
-        lastsale: 32.76,
-        MarketCap: 9620000000,
-        IPOyear: 2010,
-        Sector: "Consumer Services",
-        Industry: "Hotels/Resorts",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "ICLR",
-        name: "ICON plc",
-        lastsale: 156.17,
-        MarketCap: 8430000000,
-        IPOyear: 1998,
-        Sector: "Health Care",
-        Industry: "Biotechnology: Commercial Physical & Biological Resarch",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "ICUI",
-        name: "ICU Medical, Inc.",
-        lastsale: 254.44,
-        MarketCap: 5250000000,
-        IPOyear: 1992,
-        Sector: "Health Care",
-        Industry: "Medical/Dental Instruments",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "IDXX",
-        name: "IDEXX Laboratories, Inc.",
-        lastsale: 282.05,
-        MarketCap: 24260000000,
-        IPOyear: 1991,
-        Sector: "Health Care",
-        Industry: "Biotechnology: In Vitro & In Vivo Diagnostic Substances",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "ILMN",
-        name: "Illumina, Inc.",
-        lastsale: 299.38,
-        MarketCap: 44010000000,
-        IPOyear: 2000,
-        Sector: "Capital Goods",
-        Industry: "Biotechnology: Laboratory Analytical Instruments",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "INFO",
-        name: "IHS Markit Ltd.",
-        lastsale: 64.42,
-        MarketCap: 25840000000,
-        IPOyear: 1996,
-        Sector: "Technology",
-        Industry: "Computer Software: Programming, Data Processing",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "INTU",
-        name: "Intuit Inc.",
-        lastsale: 277.31,
-        MarketCap: 71890000000,
-        IPOyear: 1993,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "IPGP",
-        name: "IPG Photonics Corporation",
-        lastsale: 131.01,
-        MarketCap: 6970000000,
-        IPOyear: 2006,
-        Sector: "Technology",
-        Industry: "Semiconductors",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "IQ",
-        name: "iQIYI, Inc.",
-        lastsale: 18.59,
-        MarketCap: 13520000000,
-        IPOyear: 2018,
-        Sector: "Consumer Services",
-        Industry: "Consumer Electronics/Video Chains",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "ISRG",
-        name: "Intuitive Surgical, Inc.",
-        lastsale: 519.51,
-        MarketCap: 59880000000,
-        IPOyear: 2000,
-        Sector: "Health Care",
-        Industry: "Industrial Specialties",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "JAZZ",
-        name: "Jazz Pharmaceuticals plc",
-        lastsale: 139.38,
-        MarketCap: 7950000000,
-        IPOyear: 2007,
-        Sector: "Health Care",
-        Industry: "Major Pharmaceuticals",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "JBLU",
-        name: "JetBlue Airways Corporation",
-        lastsale: 19.23,
-        MarketCap: 5700000000,
-        IPOyear: 2002,
-        Sector: "Transportation",
-        Industry: "Air Freight/Delivery Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "JD",
-        name: "JD.com, Inc.",
-        lastsale: 29.91,
-        MarketCap: 43300000000,
-        IPOyear: 2014,
-        Sector: "Consumer Services",
-        Industry: "Other Specialty Stores",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "JKHY",
-        name: "Jack Henry & Associates, Inc.",
-        lastsale: 139.7,
-        MarketCap: 10790000000,
-        IPOyear: 1985,
-        Sector: "Technology",
-        Industry: "EDP Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "KLAC",
-        name: "KLA Corporation",
-        lastsale: 136.32,
-        MarketCap: 22030000000,
-        IPOyear: 1980,
-        Sector: "Capital Goods",
-        Industry: "Electronic Components",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "LAMR",
-        name: "Lamar Advertising Company",
-        lastsale: 80.92,
-        MarketCap: 8090000000,
-        IPOyear: 1996,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "LK",
-        name: "Luckin Coffee Inc.",
-        lastsale: 24.29,
-        MarketCap: 5720000000,
-        IPOyear: 2019,
-        Sector: "Consumer Services",
-        Industry: "Restaurants",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "LOGI",
-        name: "Logitech International S.A.",
-        lastsale: 41.24,
-        MarketCap: 6870000000,
-        IPOyear: 1997,
-        Sector: "Technology",
-        Industry: "Computer peripheral equipment",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "LOPE",
-        name: "Grand Canyon Education, Inc.",
-        lastsale: 108.77,
-        MarketCap: 5250000000,
-        IPOyear: 2008,
-        Sector: "Consumer Services",
-        Industry: "Other Consumer Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "LPLA",
-        name: "LPL Financial Holdings Inc.",
-        lastsale: 83.87,
-        MarketCap: 6940000000,
-        IPOyear: 2010,
-        Sector: "Finance",
-        Industry: "Investment Bankers/Brokers/Service",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "LRCX",
-        name: "Lam Research Corporation",
-        lastsale: 208.61,
-        MarketCap: 31280000000,
-        IPOyear: 1984,
-        Sector: "Technology",
-        Industry: "Industrial Machinery/Components",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "LULU",
-        name: "lululemon athletica inc.",
-        lastsale: 191.09,
-        MarketCap: 24890000000,
-        IPOyear: 2007,
-        Sector: "Consumer Non-Durables",
-        Industry: "Apparel",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "LYFT",
-        name: "Lyft, Inc.",
-        lastsale: 60.87,
-        MarketCap: 17690000000,
-        IPOyear: 2019,
-        Sector: "Miscellaneous",
-        Industry: "Business Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "MANH",
-        name: "Manhattan Associates, Inc.",
-        lastsale: 84.99,
-        MarketCap: 5470000000,
-        IPOyear: 1998,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "MASI",
-        name: "Masimo Corporation",
-        lastsale: 157.85,
-        MarketCap: 8420000000,
-        IPOyear: 2007,
-        Sector: "Health Care",
-        Industry: "Biotechnology: Electromedical & Electrotherapeutic Apparatus",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "MCHP",
-        name: "Microchip Technology Incorporated",
-        lastsale: 94.42,
-        MarketCap: 22480000000,
-        IPOyear: 1993,
-        Sector: "Technology",
-        Industry: "Semiconductors",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "MDB",
-        name: "MongoDB, Inc.",
-        lastsale: 143.22,
-        MarketCap: 7920000000,
-        IPOyear: 2017,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "MDSO",
-        name: "Medidata Solutions, Inc.",
-        lastsale: 91.37,
-        MarketCap: 5710000000,
-        IPOyear: 2009,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "MELI",
-        name: "MercadoLibre, Inc.",
-        lastsale: 621.42,
-        MarketCap: 30890000000,
-        IPOyear: 2007,
-        Sector: "Miscellaneous",
-        Industry: "Business Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "MKTX",
-        name: "MarketAxess Holdings, Inc.",
-        lastsale: 337.04,
-        MarketCap: 12730000000,
-        IPOyear: 2004,
-        Sector: "Finance",
-        Industry: "Investment Bankers/Brokers/Service",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "MLNX",
-        name: "Mellanox Technologies, Ltd.",
-        lastsale: 112.62,
-        MarketCap: 6170000000,
-        IPOyear: 2007,
-        Sector: "Technology",
-        Industry: "Semiconductors",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "MOMO",
-        name: "Momo Inc.",
-        lastsale: 33.97,
-        MarketCap: 7040000000,
-        IPOyear: 2014,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "MORN",
-        name: "Morningstar, Inc.",
-        lastsale: 151.98,
-        MarketCap: 6500000000,
-        IPOyear: 2005,
-        Sector: "Finance",
-        Industry: "Investment Managers",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "MPWR",
-        name: "Monolithic Power Systems, Inc.",
-        lastsale: 148.16,
-        MarketCap: 6380000000,
-        IPOyear: 2004,
-        Sector: "Technology",
-        Industry: "Semiconductors",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "MRVL",
-        name: "Marvell Technology Group Ltd.",
-        lastsale: 26.26,
-        MarketCap: 17360000000,
-        IPOyear: 2000,
-        Sector: "Technology",
-        Industry: "Semiconductors",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "MSFT",
-        name: "Microsoft Corporation",
-        lastsale: 136.27,
-        MarketCap: 1041510000000,
-        IPOyear: 1986,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "MSG",
-        name: "The Madison Square Garden Company",
-        lastsale: 290.04,
-        MarketCap: 6890000000,
-        IPOyear: 2015,
-        Sector: "Consumer Services",
-        Industry: "Services-Misc. Amusement & Recreation",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "MTCH",
-        name: "Match Group, Inc.",
-        lastsale: 75.29,
-        MarketCap: 21170000000,
-        IPOyear: 2015,
-        Sector: "Technology",
-        Industry: "Computer Software: Programming, Data Processing",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "MXIM",
-        name: "Maxim Integrated Products, Inc.",
-        lastsale: 59.19,
-        MarketCap: 16120000000,
-        IPOyear: 1988,
-        Sector: "Technology",
-        Industry: "Semiconductors",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "NATI",
-        name: "National Instruments Corporation",
-        lastsale: 41.76,
-        MarketCap: 5510000000,
-        IPOyear: 1995,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "NBIX",
-        name: "Neurocrine Biosciences, Inc.",
-        lastsale: 96.39,
-        MarketCap: 8830000000,
-        IPOyear: 1996,
-        Sector: "Health Care",
-        Industry: "Biotechnology: Biological Products (No Diagnostic Substances)",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "NFLX",
-        name: "Netflix, Inc.",
-        lastsale: 322.99,
-        MarketCap: 141420000000,
-        IPOyear: 2002,
-        Sector: "Consumer Services",
-        Industry: "Consumer Electronics/Video Chains",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "NTAP",
-        name: "NetApp, Inc.",
-        lastsale: 58.49,
-        MarketCap: 14040000000,
-        IPOyear: 1995,
-        Sector: "Technology",
-        Industry: "Electronic Components",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "NVCR",
-        name: "NovoCure Limited",
-        lastsale: 83.22,
-        MarketCap: 8170000000,
-        IPOyear: 2015,
-        Sector: "Health Care",
-        Industry: "Medical/Dental Instruments",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "NVDA",
-        name: "NVIDIA Corporation",
-        lastsale: 168.72,
-        MarketCap: 102750000000,
-        IPOyear: 1999,
-        Sector: "Technology",
-        Industry: "Semiconductors",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "NXPI",
-        name: "NXP Semiconductors N.V.",
-        lastsale: 103.39,
-        MarketCap: 29480000000,
-        IPOyear: 2010,
-        Sector: "Technology",
-        Industry: "Semiconductors",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "ODFL",
-        name: "Old Dominion Freight Line, Inc.",
-        lastsale: 166.98,
-        MarketCap: 13520000000,
-        IPOyear: 1991,
-        Sector: "Transportation",
-        Industry: "Trucking Freight/Courier Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "OKTA",
-        name: "Okta, Inc.",
-        lastsale: 130.83,
-        MarketCap: 14930000000,
-        IPOyear: 2017,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "OLLI",
-        name: "Ollie&#39;s Bargain Outlet Holdings, Inc.",
-        lastsale: 84.69,
-        MarketCap: 5380000000,
-        IPOyear: 2015,
-        Sector: "Consumer Services",
-        Industry: "Department/Specialty Retail Stores",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "ORLY",
-        name: "O&#39;Reilly Automotive, Inc.",
-        lastsale: 380.76,
-        MarketCap: 29200000000,
-        IPOyear: 1993,
-        Sector: "Consumer Services",
-        Industry: "Other Specialty Stores",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "OTEX",
-        name: "Open Text Corporation",
-        lastsale: 42.63,
-        MarketCap: 11500000000,
-        IPOyear: 1996,
-        Sector: "Technology",
-        Industry: "EDP Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "PAYX",
-        name: "Paychex, Inc.",
-        lastsale: 83.05,
-        MarketCap: 29840000000,
-        IPOyear: 1983,
-        Sector: "Consumer Services",
-        Industry: "Diversified Commercial Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "PCTY",
-        name: "Paylocity Holding Corporation",
-        lastsale: 102.09,
-        MarketCap: 5410000000,
-        IPOyear: 2014,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "PDD",
-        name: "Pinduoduo Inc.",
-        lastsale: 22.27,
-        MarketCap: 25890000000,
-        IPOyear: 2018,
-        Sector: "Miscellaneous",
-        Industry: "Business Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "PEGA",
-        name: "Pegasystems Inc.",
-        lastsale: 75.6,
-        MarketCap: 5970000000,
-        IPOyear: 1996,
-        Sector: "Technology",
-        Industry: "EDP Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "PFG",
-        name: "Principal Financial Group Inc",
-        lastsale: 58.04,
-        MarketCap: 16170000000,
-        IPOyear: 2001,
-        Sector: "Finance",
-        Industry: "Accident &Health Insurance",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "PFPT",
-        name: "Proofpoint, Inc.",
-        lastsale: 126.2,
-        MarketCap: 7080000000,
-        IPOyear: 2012,
-        Sector: "Technology",
-        Industry: "EDP Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "PODD",
-        name: "Insulet Corporation",
-        lastsale: 122.94,
-        MarketCap: 7340000000,
-        IPOyear: 2007,
-        Sector: "Health Care",
-        Industry: "Medical/Dental Instruments",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "POOL",
-        name: "Pool Corporation",
-        lastsale: 189.37,
-        MarketCap: 7530000000,
-        IPOyear: 1995,
-        Sector: "Consumer Durables",
-        Industry: "Industrial Specialties",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "PRAH",
-        name: "PRA Health Sciences, Inc.",
-        lastsale: 99.91,
-        MarketCap: 6560000000,
-        IPOyear: 2014,
-        Sector: "Health Care",
-        Industry: "Biotechnology: Commercial Physical & Biological Resarch",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "QCOM",
-        name: "QUALCOMM Incorporated",
-        lastsale: 73.16,
-        MarketCap: 88940000000,
-        IPOyear: 1991,
-        Sector: "Technology",
-        Industry: "Radio And Television Broadcasting And Communications Equipment",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "REG",
-        name: "Regency Centers Corporation",
-        lastsale: 66.7,
-        MarketCap: 11170000000,
-        IPOyear: 1993,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "REGN",
-        name: "Regeneron Pharmaceuticals, Inc.",
-        lastsale: 304.76,
-        MarketCap: 33410000000,
-        IPOyear: 1991,
-        Sector: "Health Care",
-        Industry: "Major Pharmaceuticals",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "ROKU",
-        name: "Roku, Inc.",
-        lastsale: 103.33,
-        MarketCap: 11710000000,
-        IPOyear: 2017,
-        Sector: "Consumer Services",
-        Industry: "Television Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "ROST",
-        name: "Ross Stores, Inc.",
-        lastsale: 106.03,
-        MarketCap: 38670000000,
-        IPOyear: 1985,
-        Sector: "Consumer Services",
-        Industry: "Clothing/Shoe/Accessory Stores",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "RP",
-        name: "RealPage, Inc.",
-        lastsale: 62.48,
-        MarketCap: 5910000000,
-        IPOyear: 2010,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "RYAAY",
-        name: "Ryanair Holdings plc",
-        lastsale: 62.13,
-        MarketCap: 13910000000,
-        IPOyear: 1997,
-        Sector: "Transportation",
-        Industry: "Air Freight/Delivery Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "SABR",
-        name: "Sabre Corporation",
-        lastsale: 23.51,
-        MarketCap: 6460000000,
-        IPOyear: 2014,
-        Sector: "Technology",
-        Industry: "Computer Software: Programming, Data Processing",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "SAGE",
-        name: "Sage Therapeutics, Inc.",
-        lastsale: 160.34,
-        MarketCap: 8200000000,
-        IPOyear: 2014,
-        Sector: "Health Care",
-        Industry: "Major Pharmaceuticals",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "SBAC",
-        name: "SBA Communications Corporation",
-        lastsale: 245.41,
-        MarketCap: 27750000000,
-        IPOyear: 1999,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "SBNY",
-        name: "Signature Bank",
-        lastsale: 127.46,
-        MarketCap: 7020000000,
-        IPOyear: 2004,
-        Sector: "Finance",
-        Industry: "Major Banks",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "SBUX",
-        name: "Starbucks Corporation",
-        lastsale: 94.69,
-        MarketCap: 114690000000,
-        IPOyear: 1992,
-        Sector: "Consumer Services",
-        Industry: "Restaurants",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "SEIC",
-        name: "SEI Investments Company",
-        lastsale: 59.59,
-        MarketCap: 9000000000,
-        IPOyear: 1981,
-        Sector: "Finance",
-        Industry: "Investment Bankers/Brokers/Service",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "SGEN",
-        name: "Seattle Genetics, Inc.",
-        lastsale: 75.71,
-        MarketCap: 12240000000,
-        IPOyear: 2001,
-        Sector: "Health Care",
-        Industry: "Biotechnology: Biological Products (No Diagnostic Substances)",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "SNPS",
-        name: "Synopsys, Inc.",
-        lastsale: 132.76,
-        MarketCap: 19900000000,
-        IPOyear: 1992,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "SPLK",
-        name: "Splunk Inc.",
-        lastsale: 135.31,
-        MarketCap: 20320000000,
-        IPOyear: 2012,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "SSNC",
-        name: "SS&C Technologies Holdings, Inc.",
-        lastsale: 47.95,
-        MarketCap: 12130000000,
-        IPOyear: 2010,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "STLD",
-        name: "Steel Dynamics, Inc.",
-        lastsale: 31.51,
-        MarketCap: 7000000000,
-        IPOyear: 1996,
-        Sector: "Basic Industries",
-        Industry: "Steel/Iron Ore",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "STNE",
-        name: "StoneCo Ltd.",
-        lastsale: 35.01,
-        MarketCap: 10390000000,
-        IPOyear: 2018,
-        Sector: "Technology",
-        Industry: "EDP Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "STX",
-        name: "Seagate Technology PLC",
-        lastsale: 46.31,
-        MarketCap: 12820000000,
-        IPOyear: 2002,
-        Sector: "Technology",
-        Industry: "Electronic Components",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "SYMC",
-        name: "Symantec Corporation",
-        lastsale: 21.56,
-        MarketCap: 13310000000,
-        IPOyear: 1989,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "SYNH",
-        name: "Syneos Health, Inc.",
-        lastsale: 51.09,
-        MarketCap: 5300000000,
-        IPOyear: 2014,
-        Sector: "Health Care",
-        Industry: "Biotechnology: Commercial Physical & Biological Resarch",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "TEAM",
-        name: "Atlassian Corporation Plc",
-        lastsale: 140.12,
-        MarketCap: 33780000000,
-        IPOyear: 2015,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "TRMB",
-        name: "Trimble Inc.",
-        lastsale: 42.26,
-        MarketCap: 10630000000,
-        IPOyear: 1990,
-        Sector: "Capital Goods",
-        Industry: "Industrial Machinery/Components",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "TROW",
-        name: "T. Rowe Price Group, Inc.",
-        lastsale: 113.39,
-        MarketCap: 26710000000,
-        IPOyear: 1986,
-        Sector: "Finance",
-        Industry: "Investment Bankers/Brokers/Service",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "TSCO",
-        name: "Tractor Supply Company",
-        lastsale: 108.81,
-        MarketCap: 13130000000,
-        IPOyear: 1994,
-        Sector: "Consumer Services",
-        Industry: "RETAIL: Building Materials",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "TSLA",
-        name: "Tesla, Inc.",
-        lastsale: 241.61,
-        MarketCap: 43280000000,
-        IPOyear: 2010,
-        Sector: "Capital Goods",
-        Industry: "Auto Manufacturing",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "TTD",
-        name: "The Trade Desk, Inc.",
-        lastsale: 263.31,
-        MarketCap: 11720000000,
-        IPOyear: 2016,
-        Sector: "Technology",
-        Industry: "Computer Software: Programming, Data Processing",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "TTWO",
-        name: "Take-Two Interactive Software, Inc.",
-        lastsale: 122.52,
-        MarketCap: 13870000000,
-        IPOyear: 1997,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "TW",
-        name: "Tradeweb Markets Inc.",
-        lastsale: 47.36,
-        MarketCap: 10520000000,
-        IPOyear: 2019,
-        Sector: "Finance",
-        Industry: "Investment Bankers/Brokers/Service",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "UBNT",
-        name: "Ubiquiti Networks, Inc.",
-        lastsale: 128.73,
-        MarketCap: 9090000000,
-        IPOyear: 2011,
-        Sector: "Technology",
-        Industry: "Radio And Television Broadcasting And Communications Equipment",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "ULTA",
-        name: "Ulta Beauty, Inc.",
-        lastsale: 349.25,
-        MarketCap: 20420000000,
-        IPOyear: 2007,
-        Sector: "Consumer Services",
-        Industry: "Other Specialty Stores",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "VRSK",
-        name: "Verisk Analytics, Inc.",
-        lastsale: 151.72,
-        MarketCap: 24830000000,
-        IPOyear: 2009,
-        Sector: "Technology",
-        Industry: "EDP Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "VRSN",
-        name: "VeriSign, Inc.",
-        lastsale: 211.09,
-        MarketCap: 24990000000,
-        IPOyear: 1998,
-        Sector: "Technology",
-        Industry: "EDP Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "VRTX",
-        name: "Vertex Pharmaceuticals Incorporated",
-        lastsale: 166.62,
-        MarketCap: 42670000000,
-        IPOyear: 1991,
-        Sector: "Health Care",
-        Industry: "Major Pharmaceuticals",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "WB",
-        name: "Weibo Corporation",
-        lastsale: 39.17,
-        MarketCap: 8810000000,
-        IPOyear: 2014,
-        Sector: "Technology",
-        Industry: "Computer Software: Programming, Data Processing",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "WIX",
-        name: "Wix.com Ltd.",
-        lastsale: 148.52,
-        MarketCap: 7410000000,
-        IPOyear: 2013,
-        Sector: "Technology",
-        Industry: "Computer Software: Programming, Data Processing",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "WYNN",
-        name: "Wynn Resorts, Limited",
-        lastsale: 130.07,
-        MarketCap: 14000000000,
-        IPOyear: 2002,
-        Sector: "Consumer Services",
-        Industry: "Hotels/Resorts",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "XLNX",
-        name: "Xilinx, Inc.",
-        lastsale: 114.21,
-        MarketCap: 28850000000,
-        IPOyear: 1990,
-        Sector: "Technology",
-        Industry: "Semiconductors",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "XRAY",
-        name: "DENTSPLY SIRONA Inc.",
-        lastsale: 54.45,
-        MarketCap: 12740000000,
-        IPOyear: 1987,
-        Sector: "Health Care",
-        Industry: "Medical/Dental Instruments",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "YNDX",
-        name: "Yandex N.V.",
-        lastsale: 39.22,
-        MarketCap: 12820000000,
-        IPOyear: 2011,
-        Sector: "Technology",
-        Industry: "Computer Software: Programming, Data Processing",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "YY",
-        name: "YY Inc.",
-        lastsale: 64.19,
-        MarketCap: 5060000000,
-        IPOyear: 2012,
-        Sector: "Technology",
-        Industry: "EDP Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "ZBRA",
-        name: "Zebra Technologies Corporation",
-        lastsale: 210.89,
-        MarketCap: 11380000000,
-        IPOyear: 1991,
-        Sector: "Technology",
-        Industry: "Industrial Machinery/Components",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "ZG",
-        name: "Zillow Group, Inc.",
-        lastsale: 49.84,
-        MarketCap: 10230000000,
-        IPOyear: 2011,
-        Sector: "Miscellaneous",
-        Industry: "Business Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "ZM",
-        name: "Zoom Video Communications, Inc.",
-        lastsale: 95.51,
-        MarketCap: 26020000000,
-        IPOyear: 2019,
-        Sector: "Technology",
-        Industry: "Computer Software: Programming, Data Processing",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "ZNGA",
-        name: "Zynga Inc.",
-        lastsale: 6.38,
-        MarketCap: 5970000000,
-        IPOyear: 2011,
-        Sector: "Technology",
-        Industry: "EDP Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "ZS",
-        name: "Zscaler, Inc.",
-        lastsale: 84.27,
-        MarketCap: 10590000000,
-        IPOyear: 2018,
-        Sector: "Technology",
-        Industry: "EDP Services",
-        Exchange: "NASDAQ"
-      },
-      {
-        symbol: "A",
-        name: "Agilent Technologies, Inc.",
-        lastsale: 69.41,
-        MarketCap: 21930000000,
-        IPOyear: 1999,
-        Sector: "Capital Goods",
-        Industry: "Biotechnology: Laboratory Analytical Instruments",
-        Exchange: "NYSE"
+        symbol: "ABT",
+        name: "Abbott Laboratories",
+        sector: "Health Care"
       },
       {
         symbol: "ABBV",
         name: "AbbVie Inc.",
-        lastsale: 66.62,
-        MarketCap: 98490000000,
-        IPOyear: 2012,
-        Sector: "Health Care",
-        Industry: "Major Pharmaceuticals",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "ABEV",
-        name: "Ambev S.A.",
-        lastsale: 5.27,
-        MarketCap: 82880000000,
-        IPOyear: 2013,
-        Sector: "Consumer Non-Durables",
-        Industry: "Beverages (Production/Distribution)",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "ACB",
-        name: "Aurora Cannabis Inc.",
-        lastsale: 6.25,
-        MarketCap: 6360000000,
-        IPOyear: 2018,
-        Sector: "Consumer Durables",
-        Industry: "Specialty Chemicals",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "ACC",
-        name: "American Campus Communities Inc",
-        lastsale: 46.75,
-        MarketCap: 6420000000,
-        IPOyear: 2004,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "ACH",
-        name: "Aluminum Corporation of China Limited",
-        lastsale: 8.05,
-        MarketCap: 5480000000,
-        IPOyear: 2001,
-        Sector: "Basic Industries",
-        Industry: "Aluminum",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "ACM",
-        name: "AECOM",
-        lastsale: 35.95,
-        MarketCap: 5660000000,
-        IPOyear: 2007,
-        Sector: "Consumer Services",
-        Industry: "Military/Government/Technical",
-        Exchange: "NYSE"
+        sector: "Health Care"
       },
       {
         symbol: "ACN",
         name: "Accenture plc",
-        lastsale: 192.58,
-        MarketCap: 122820000000,
-        IPOyear: 2001,
-        Sector: "Miscellaneous",
-        Industry: "Business Services",
-        Exchange: "NYSE"
+        sector: "Information Technology"
       },
       {
-        symbol: "ADS",
-        name: "Alliance Data Systems Corporation",
-        lastsale: 156.92,
-        MarketCap: 8220000000,
-        IPOyear: 2001,
-        Sector: "Miscellaneous",
-        Industry: "Business Services",
-        Exchange: "NYSE"
+        symbol: "ATVI",
+        name: "Activision Blizzard",
+        sector: "Information Technology"
       },
       {
-        symbol: "AER",
-        name: "Aercap Holdings N.V.",
-        lastsale: 54.53,
-        MarketCap: 7450000000,
-        IPOyear: 2006,
-        Sector: "Technology",
-        Industry: "Diversified Commercial Services",
-        Exchange: "NYSE"
+        symbol: "AYI",
+        name: "Acuity Brands Inc",
+        sector: "Industrials"
       },
       {
-        symbol: "AGN",
-        name: "Allergan plc.",
-        lastsale: 160.5,
-        MarketCap: 52620000000,
-        IPOyear: 2013,
-        Sector: "Health Care",
-        Industry: "Major Pharmaceuticals",
-        Exchange: "NYSE"
+        symbol: "ADBE",
+        name: "Adobe Systems Inc",
+        sector: "Information Technology"
       },
       {
-        symbol: "AGR",
-        name: "Avangrid, Inc.",
-        lastsale: 50.55,
-        MarketCap: 15620000000,
-        IPOyear: 2015,
-        Sector: "Public Utilities",
-        Industry: "Electric Utilities: Central",
-        Exchange: "NYSE"
+        symbol: "AAP",
+        name: "Advance Auto Parts",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "AIV",
-        name: "Apartment Investment and Management Company",
-        lastsale: 49.54,
-        MarketCap: 7370000000,
-        IPOyear: 1994,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NYSE"
+        symbol: "AMD",
+        name: "Advanced Micro Devices Inc",
+        sector: "Information Technology"
       },
       {
-        symbol: "AIZ",
-        name: "Assurant, Inc.",
-        lastsale: 113.36,
-        MarketCap: 6970000000,
-        IPOyear: 2004,
-        Sector: "Finance",
-        Industry: "Accident &Health Insurance",
-        Exchange: "NYSE"
+        symbol: "AES",
+        name: "AES Corp",
+        sector: "Utilities"
       },
       {
-        symbol: "ALC",
-        name: "Alcon Inc.",
-        lastsale: 58.75,
-        MarketCap: 28710000000,
-        IPOyear: 2019,
-        Sector: "Health Care",
-        Industry: "Ophthalmic Goods",
-        Exchange: "NYSE"
+        symbol: "AET",
+        name: "Aetna Inc",
+        sector: "Health Care"
+      },
+      {
+        symbol: "AMG",
+        name: "Affiliated Managers Group Inc",
+        sector: "Financials"
+      },
+      {
+        symbol: "AFL",
+        name: "AFLAC Inc",
+        sector: "Financials"
+      },
+      {
+        symbol: "A",
+        name: "Agilent Technologies Inc",
+        sector: "Health Care"
+      },
+      {
+        symbol: "APD",
+        name: "Air Products & Chemicals Inc",
+        sector: "Materials"
+      },
+      {
+        symbol: "AKAM",
+        name: "Akamai Technologies Inc",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "ALK",
+        name: "Alaska Air Group Inc",
+        sector: "Industrials"
+      },
+      {
+        symbol: "ALB",
+        name: "Albemarle Corp",
+        sector: "Materials"
+      },
+      {
+        symbol: "ARE",
+        name: "Alexandria Real Estate Equities Inc",
+        sector: "Real Estate"
+      },
+      {
+        symbol: "ALXN",
+        name: "Alexion Pharmaceuticals",
+        sector: "Health Care"
+      },
+      {
+        symbol: "ALGN",
+        name: "Align Technology",
+        sector: "Health Care"
       },
       {
         symbol: "ALLE",
-        name: "Allegion plc",
-        lastsale: 103.54,
-        MarketCap: 9670000000,
-        IPOyear: 2013,
-        Sector: "Consumer Services",
-        Industry: "Diversified Commercial Services",
-        Exchange: "NYSE"
+        name: "Allegion",
+        sector: "Industrials"
       },
       {
-        symbol: "ALLY",
-        name: "Ally Financial Inc.",
-        lastsale: 32.91,
-        MarketCap: 12930000000,
-        IPOyear: 2014,
-        Sector: "Finance",
-        Industry: "Major Banks",
-        Exchange: "NYSE"
+        symbol: "AGN",
+        name: "Allergan, Plc",
+        sector: "Health Care"
       },
       {
-        symbol: "ALSN",
-        name: "Allison Transmission Holdings, Inc.",
-        lastsale: 45.95,
-        MarketCap: 5530000000,
-        IPOyear: 2012,
-        Sector: "Capital Goods",
-        Industry: "Auto Parts:O.E.M.",
-        Exchange: "NYSE"
+        symbol: "ADS",
+        name: "Alliance Data Systems",
+        sector: "Information Technology"
       },
       {
-        symbol: "AMCR",
-        name: "Amcor plc",
-        lastsale: 10.6,
-        MarketCap: 17210000000,
-        IPOyear: 2019,
-        Sector: "Consumer Durables",
-        Industry: "Miscellaneous manufacturing industries",
-        Exchange: "NYSE"
+        symbol: "LNT",
+        name: "Alliant Energy Corp",
+        sector: "Utilities"
       },
       {
-        symbol: "AMH",
-        name: "American Homes 4 Rent",
-        lastsale: 24.21,
-        MarketCap: 7270000000,
-        IPOyear: 2013,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NYSE"
+        symbol: "ALL",
+        name: "Allstate Corp",
+        sector: "Financials"
       },
       {
-        symbol: "ANET",
-        name: "Arista Networks, Inc.",
-        lastsale: 273.45,
-        MarketCap: 20950000000,
-        IPOyear: 2014,
-        Sector: "Technology",
-        Industry: "Computer Communications Equipment",
-        Exchange: "NYSE"
+        symbol: "GOOGL",
+        name: "Alphabet Inc Class A",
+        sector: "Information Technology"
       },
       {
-        symbol: "APO",
-        name: "Apollo Global Management, LLC",
-        lastsale: 33,
-        MarketCap: 13290000000,
-        IPOyear: 2011,
-        Sector: "Finance",
-        Industry: "Investment Managers",
-        Exchange: "NYSE"
+        symbol: "GOOG",
+        name: "Alphabet Inc Class C",
+        sector: "Information Technology"
       },
       {
-        symbol: "APTV",
-        name: "Aptiv PLC",
-        lastsale: 87.65,
-        MarketCap: 22600000000,
-        IPOyear: 2011,
-        Sector: "Capital Goods",
-        Industry: "Auto Parts:O.E.M.",
-        Exchange: "NYSE"
+        symbol: "MO",
+        name: "Altria Group Inc",
+        sector: "Consumer Staples"
       },
       {
-        symbol: "AQN",
-        name: "Algonquin Power & Utilities Corp.",
-        lastsale: 12.45,
-        MarketCap: 6110000000,
-        IPOyear: 2016,
-        Sector: "Public Utilities",
-        Industry: "Electric Utilities: Central",
-        Exchange: "NYSE"
+        symbol: "AMZN",
+        name: "Amazon.com Inc",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "ARES",
-        name: "Ares Management Corporation",
-        lastsale: 29.25,
-        MarketCap: 6440000000,
-        IPOyear: 2014,
-        Sector: "Finance",
-        Industry: "Investment Managers",
-        Exchange: "NYSE"
+        symbol: "AEE",
+        name: "Ameren Corp",
+        sector: "Utilities"
       },
       {
-        symbol: "ARMK",
-        name: "Aramark",
-        lastsale: 36.19,
-        MarketCap: 8920000000,
-        IPOyear: 2013,
-        Sector: "Consumer Services",
-        Industry: "Restaurants",
-        Exchange: "NYSE"
+        symbol: "AAL",
+        name: "American Airlines Group",
+        sector: "Industrials"
       },
       {
-        symbol: "ASX",
-        name: "ASE Technology Holding Co., Ltd.",
-        lastsale: 4.38,
-        MarketCap: 9310000000,
-        IPOyear: 2018,
-        Sector: "Technology",
-        Industry: "Semiconductors",
-        Exchange: "NYSE"
+        symbol: "AEP",
+        name: "American Electric Power",
+        sector: "Utilities"
       },
       {
-        symbol: "ATH",
-        name: "Athene Holding Ltd.",
-        lastsale: 40.86,
-        MarketCap: 7910000000,
-        IPOyear: 2016,
-        Sector: "Finance",
-        Industry: "Life Insurance",
-        Exchange: "NYSE"
+        symbol: "AXP",
+        name: "American Express Co",
+        sector: "Financials"
       },
       {
-        symbol: "ATHM",
-        name: "Autohome Inc.",
-        lastsale: 85,
-        MarketCap: 10030000000,
-        IPOyear: 2013,
-        Sector: "Technology",
-        Industry: "EDP Services",
-        Exchange: "NYSE"
+        symbol: "AIG",
+        name: "American International Group, Inc.",
+        sector: "Financials"
       },
       {
-        symbol: "ATUS",
-        name: "Altice USA, Inc.",
-        lastsale: 25.81,
-        MarketCap: 17420000000,
-        IPOyear: 2017,
-        Sector: "Consumer Services",
-        Industry: "Television Services",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "AVAL",
-        name: "Grupo Aval Acciones y Valores S.A.",
-        lastsale: 7.51,
-        MarketCap: 8370000000,
-        IPOyear: 2014,
-        Sector: "Finance",
-        Industry: "Commercial Banks",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "AVLR",
-        name: "Avalara, Inc.",
-        lastsale: 81.48,
-        MarketCap: 5700000000,
-        IPOyear: 2018,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "AVTR",
-        name: "Avantor, Inc.",
-        lastsale: 17.59,
-        MarketCap: 9400000000,
-        IPOyear: 2019,
-        Sector: "Capital Goods",
-        Industry: "Biotechnology: Laboratory Analytical Instruments",
-        Exchange: "NYSE"
+        symbol: "AMT",
+        name: "American Tower Corp A",
+        sector: "Real Estate"
       },
       {
         symbol: "AWK",
-        name: "American Water Works",
-        lastsale: 114.78,
-        MarketCap: 20440000000,
-        IPOyear: 2008,
-        Sector: "Public Utilities",
-        Industry: "Water Supply",
-        Exchange: "NYSE"
+        name: "American Water Works Company Inc",
+        sector: "Utilities"
       },
       {
-        symbol: "AXS",
-        name: "Axis Capital Holdings Limited",
-        lastsale: 63.67,
-        MarketCap: 5340000000,
-        IPOyear: 2003,
-        Sector: "Finance",
-        Industry: "Property-Casualty Insurers",
-        Exchange: "NYSE"
+        symbol: "AMP",
+        name: "Ameriprise Financial",
+        sector: "Financials"
       },
       {
-        symbol: "AXTA",
-        name: "Axalta Coating Systems Ltd.",
-        lastsale: 29.63,
-        MarketCap: 6910000000,
-        IPOyear: 2014,
-        Sector: "Basic Industries",
-        Industry: "Paints/Coatings",
-        Exchange: "NYSE"
+        symbol: "ABC",
+        name: "AmerisourceBergen Corp",
+        sector: "Health Care"
       },
       {
-        symbol: "AYX",
-        name: "Alteryx, Inc.",
-        lastsale: 117.54,
-        MarketCap: 7350000000,
-        IPOyear: 2017,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NYSE"
+        symbol: "AME",
+        name: "AMETEK Inc",
+        sector: "Industrials"
       },
       {
-        symbol: "BABA",
-        name: "Alibaba Group Holding Limited",
-        lastsale: 173.11,
-        MarketCap: 450700000000,
-        IPOyear: 2014,
-        Sector: "Miscellaneous",
-        Industry: "Business Services",
-        Exchange: "NYSE"
+        symbol: "AMGN",
+        name: "Amgen Inc",
+        sector: "Health Care"
       },
       {
-        symbol: "BAH",
-        name: "Booz Allen Hamilton Holding Corporation",
-        lastsale: 68.75,
-        MarketCap: 9640000000,
-        IPOyear: 2010,
-        Sector: "Consumer Services",
-        Industry: "Professional Services",
-        Exchange: "NYSE"
+        symbol: "APH",
+        name: "Amphenol Corp",
+        sector: "Information Technology"
       },
       {
-        symbol: "BERY",
-        name: "Berry Global Group, Inc.",
-        lastsale: 45.05,
-        MarketCap: 5930000000,
-        IPOyear: 2012,
-        Sector: "Consumer Non-Durables",
-        Industry: "Plastic Products",
-        Exchange: "NYSE"
+        symbol: "APC",
+        name: "Anadarko Petroleum Corp",
+        sector: "Energy"
       },
       {
-        symbol: "BFAM",
-        name: "Bright Horizons Family Solutions Inc.",
-        lastsale: 152.07,
-        MarketCap: 8830000000,
-        IPOyear: 2013,
-        Sector: "Miscellaneous",
-        Industry: "Other Consumer Services",
-        Exchange: "NYSE"
+        symbol: "ADI",
+        name: "Analog Devices, Inc.",
+        sector: "Information Technology"
       },
       {
-        symbol: "BG",
-        name: "Bunge Limited",
-        lastsale: 58.43,
-        MarketCap: 8270000000,
-        IPOyear: 2001,
-        Sector: "Consumer Non-Durables",
-        Industry: "Packaged Foods",
-        Exchange: "NYSE"
+        symbol: "ANDV",
+        name: "Andeavor",
+        sector: "Energy"
+      },
+      {
+        symbol: "ANSS",
+        name: "ANSYS",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "ANTM",
+        name: "Anthem Inc.",
+        sector: "Health Care"
+      },
+      {
+        symbol: "AON",
+        name: "Aon plc",
+        sector: "Financials"
+      },
+      {
+        symbol: "APA",
+        name: "Apache Corporation",
+        sector: "Energy"
+      },
+      {
+        symbol: "AIV",
+        name: "Apartment Investment & Management",
+        sector: "Real Estate"
+      },
+      {
+        symbol: "AAPL",
+        name: "Apple Inc.",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "AMAT",
+        name: "Applied Materials Inc",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "APTV",
+        name: "Aptiv Plc",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "ADM",
+        name: "Archer-Daniels-Midland Co",
+        sector: "Consumer Staples"
+      },
+      {
+        symbol: "ARNC",
+        name: "Arconic Inc",
+        sector: "Industrials"
+      },
+      {
+        symbol: "AJG",
+        name: "Arthur J. Gallagher & Co.",
+        sector: "Financials"
+      },
+      {
+        symbol: "AIZ",
+        name: "Assurant Inc",
+        sector: "Financials"
+      },
+      {
+        symbol: "T",
+        name: "AT&T Inc",
+        sector: "Telecommunication Services"
+      },
+      {
+        symbol: "ADSK",
+        name: "Autodesk Inc",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "ADP",
+        name: "Automatic Data Processing",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "AZO",
+        name: "AutoZone Inc",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "AVB",
+        name: "AvalonBay Communities, Inc.",
+        sector: "Real Estate"
+      },
+      {
+        symbol: "AVY",
+        name: "Avery Dennison Corp",
+        sector: "Materials"
       },
       {
         symbol: "BHGE",
-        name: "Baker Hughes, a GE company",
-        lastsale: 25.39,
-        MarketCap: 26330000000,
-        IPOyear: 2017,
-        Sector: "Energy",
-        Industry: "Metal Fabrications",
-        Exchange: "NYSE"
+        name: "Baker Hughes, a GE Company",
+        sector: "Energy"
       },
       {
-        symbol: "BKI",
-        name: "Black Knight, Inc.",
-        lastsale: 63.32,
-        MarketCap: 9490000000,
-        IPOyear: 2017,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NYSE"
+        symbol: "BLL",
+        name: "Ball Corp",
+        sector: "Materials"
+      },
+      {
+        symbol: "BAC",
+        name: "Bank of America Corp",
+        sector: "Financials"
+      },
+      {
+        symbol: "BAX",
+        name: "Baxter International Inc.",
+        sector: "Health Care"
+      },
+      {
+        symbol: "BBT",
+        name: "BB&T Corporation",
+        sector: "Financials"
+      },
+      {
+        symbol: "BDX",
+        name: "Becton Dickinson",
+        sector: "Health Care"
+      },
+      {
+        symbol: "BRK.B",
+        name: "Berkshire Hathaway",
+        sector: "Financials"
+      },
+      {
+        symbol: "BBY",
+        name: "Best Buy Co. Inc.",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "BIIB",
+        name: "Biogen Inc.",
+        sector: "Health Care"
       },
       {
         symbol: "BLK",
-        name: "BlackRock, Inc.",
-        lastsale: 467.68,
-        MarketCap: 72660000000,
-        IPOyear: 1999,
-        Sector: "Finance",
-        Industry: "Investment Bankers/Brokers/Service",
-        Exchange: "NYSE"
+        name: "BlackRock",
+        sector: "Financials"
       },
       {
-        symbol: "BPL",
-        name: "Buckeye Partners L.P.",
-        lastsale: 41.73,
-        MarketCap: 6700000000,
-        IPOyear: 1986,
-        Sector: "Energy",
-        Industry: "Natural Gas Distribution",
-        Exchange: "NYSE"
+        symbol: "HRB",
+        name: "Block H&R",
+        sector: "Financials"
       },
       {
-        symbol: "BRX",
-        name: "Brixmor Property Group Inc.",
-        lastsale: 18.98,
-        MarketCap: 5650000000,
-        IPOyear: 2013,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NYSE"
+        symbol: "BA",
+        name: "Boeing Company",
+        sector: "Industrials"
       },
       {
-        symbol: "BSBR",
-        name: "Banco Santander Brasil SA",
-        lastsale: 11.28,
-        MarketCap: 84240000000,
-        IPOyear: 2009,
-        Sector: "Finance",
-        Industry: "Commercial Banks",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "BSMX",
-        name: "Banco Santander Mexico, S.A., Institucion de Ban",
-        lastsale: 7.1,
-        MarketCap: 9640000000,
-        IPOyear: 2012,
-        Sector: "Finance",
-        Industry: "Commercial Banks",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "BURL",
-        name: "Burlington Stores, Inc.",
-        lastsale: 180.75,
-        MarketCap: 12000000000,
-        IPOyear: 2013,
-        Sector: "Consumer Services",
-        Industry: "Department/Specialty Retail Stores",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "BX",
-        name: "The Blackstone Group Inc.",
-        lastsale: 47.98,
-        MarketCap: 57480000000,
-        IPOyear: 2007,
-        Sector: "Finance",
-        Industry: "Investment Managers",
-        Exchange: "NYSE"
+        symbol: "BWA",
+        name: "BorgWarner",
+        sector: "Consumer Discretionary"
       },
       {
         symbol: "BXP",
-        name: "Boston Properties, Inc.",
-        lastsale: 132.95,
-        MarketCap: 20550000000,
-        IPOyear: 1997,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NYSE"
+        name: "Boston Properties",
+        sector: "Real Estate"
       },
       {
-        symbol: "CABO",
-        name: "Cable One, Inc.",
-        lastsale: 1216.8,
-        MarketCap: 6940000000,
-        IPOyear: 2015,
-        Sector: "Consumer Services",
-        Industry: "Television Services",
-        Exchange: "NYSE"
+        symbol: "BSX",
+        name: "Boston Scientific",
+        sector: "Health Care"
       },
       {
-        symbol: "CBD",
-        name: "Companhia Brasileira de Distribuicao",
-        lastsale: 24.36,
-        MarketCap: 6500000000,
-        IPOyear: 1997,
-        Sector: "Consumer Services",
-        Industry: "Food Chains",
-        Exchange: "NYSE"
+        symbol: "BHF",
+        name: "Brighthouse Financial Inc",
+        sector: "Financials"
       },
       {
-        symbol: "CCEP",
-        name: "Coca-Cola European Partners plc",
-        lastsale: 55.28,
-        MarketCap: 25800000000,
-        IPOyear: 2016,
-        Sector: "Consumer Non-Durables",
-        Industry: "Beverages (Production/Distribution)",
-        Exchange: "NYSE"
+        symbol: "BMY",
+        name: "Bristol-Myers Squibb",
+        sector: "Health Care"
       },
       {
-        symbol: "CCL",
-        name: "Carnival Corporation",
-        lastsale: 47.23,
-        MarketCap: 33830000000,
-        IPOyear: 1987,
-        Sector: "Consumer Services",
-        Industry: "Marine Transportation",
-        Exchange: "NYSE"
+        symbol: "AVGO",
+        name: "Broadcom",
+        sector: "Information Technology"
       },
       {
-        symbol: "CDAY",
-        name: "Ceridian HCM Holding Inc.",
-        lastsale: 53.31,
-        MarketCap: 7410000000,
-        IPOyear: 2018,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NYSE"
+        symbol: "BF.B",
+        name: "Brown-Forman Corp.",
+        sector: "Consumer Staples"
       },
       {
-        symbol: "CE",
-        name: "Celanese Corporation",
-        lastsale: 112.17,
-        MarketCap: 13880000000,
-        IPOyear: 2005,
-        Sector: "Basic Industries",
-        Industry: "Major Chemicals",
-        Exchange: "NYSE"
+        symbol: "CHRW",
+        name: "C. H. Robinson Worldwide",
+        sector: "Industrials"
       },
       {
-        symbol: "CEA",
-        name: "China Eastern Airlines Corporation Ltd.",
-        lastsale: 27.47,
-        MarketCap: 7950000000,
-        IPOyear: 1997,
-        Sector: "Transportation",
-        Industry: "Air Freight/Delivery Services",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "CF",
-        name: "CF Industries Holdings, Inc.",
-        lastsale: 49.56,
-        MarketCap: 10960000000,
-        IPOyear: 2005,
-        Sector: "Basic Industries",
-        Industry: "Agricultural Chemicals",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "CFG",
-        name: "Citizens Financial Group, Inc.",
-        lastsale: 37.26,
-        MarketCap: 17060000000,
-        IPOyear: 2014,
-        Sector: "Finance",
-        Industry: "Major Banks",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "CHA",
-        name: "China Telecom Corp Ltd",
-        lastsale: 44.74,
-        MarketCap: 36210000000,
-        IPOyear: 2002,
-        Sector: "Public Utilities",
-        Industry: "Telecommunications Equipment",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "CHGG",
-        name: "Chegg, Inc.",
-        lastsale: 44.92,
-        MarketCap: 5370000000,
-        IPOyear: 2013,
-        Sector: "Consumer Services",
-        Industry: "Other Consumer Services",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "CHWY",
-        name: "Chewy, Inc.",
-        lastsale: 33.56,
-        MarketCap: 13380000000,
-        IPOyear: 2019,
-        Sector: "Consumer Services",
-        Industry: "Catalog/Specialty Distribution",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "CIEN",
-        name: "Ciena Corporation",
-        lastsale: 45.22,
-        MarketCap: 7010000000,
-        IPOyear: 1997,
-        Sector: "Public Utilities",
-        Industry: "Telecommunications Equipment",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "CLR",
-        name: "Continental Resources, Inc.",
-        lastsale: 37.17,
-        MarketCap: 14000000000,
-        IPOyear: 2007,
-        Sector: "Energy",
-        Industry: "Oil & Gas Production",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "CMG",
-        name: "Chipotle Mexican Grill, Inc.",
-        lastsale: 795.53,
-        MarketCap: 22050000000,
-        IPOyear: 2006,
-        Sector: "Consumer Services",
-        Industry: "Restaurants",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "CNHI",
-        name: "CNH Industrial N.V.",
-        lastsale: 10.11,
-        MarketCap: 13690000000,
-        IPOyear: 2013,
-        Sector: "Capital Goods",
-        Industry: "Construction/Ag Equipment/Trucks",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "COF",
-        name: "Capital One Financial Corporation",
-        lastsale: 92.42,
-        MarketCap: 43470000000,
-        IPOyear: 1994,
-        Sector: "Finance",
-        Industry: "Major Banks",
-        Exchange: "NYSE"
+        symbol: "CA",
+        name: "CA, Inc.",
+        sector: "Information Technology"
       },
       {
         symbol: "COG",
-        name: "Cabot Oil & Gas Corporation",
-        lastsale: 19.16,
-        MarketCap: 8020000000,
-        IPOyear: 1990,
-        Sector: "Energy",
-        Industry: "Oil & Gas Production",
-        Exchange: "NYSE"
+        name: "Cabot Oil & Gas",
+        sector: "Energy"
       },
       {
-        symbol: "COLD",
-        name: "Americold Realty Trust",
-        lastsale: 33.53,
-        MarketCap: 6420000000,
-        IPOyear: 2018,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NYSE"
+        symbol: "CDNS",
+        name: "Cadence Design Systems",
+        sector: "Information Technology"
       },
       {
-        symbol: "COTY",
-        name: "Coty Inc.",
-        lastsale: 10.91,
-        MarketCap: 8200000000,
-        IPOyear: 2013,
-        Sector: "Consumer Non-Durables",
-        Industry: "Package Goods/Cosmetics",
-        Exchange: "NYSE"
+        symbol: "CPB",
+        name: "Campbell Soup",
+        sector: "Consumer Staples"
       },
       {
-        symbol: "CPL",
-        name: "CPFL Energia S.A.",
-        lastsale: 16.89,
-        MarketCap: 9730000000,
-        IPOyear: 2004,
-        Sector: "Public Utilities",
-        Industry: "Electric Utilities: Central",
-        Exchange: "NYSE"
+        symbol: "COF",
+        name: "Capital One Financial",
+        sector: "Financials"
       },
       {
-        symbol: "CPRI",
-        name: "Capri Holdings Limited",
-        lastsale: 35.59,
-        MarketCap: 5370000000,
-        IPOyear: 2011,
-        Sector: "Consumer Non-Durables",
-        Industry: "Apparel",
-        Exchange: "NYSE"
+        symbol: "CAH",
+        name: "Cardinal Health Inc.",
+        sector: "Health Care"
       },
       {
-        symbol: "CPT",
-        name: "Camden Property Trust",
-        lastsale: 103.71,
-        MarketCap: 10040000000,
-        IPOyear: 1993,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NYSE"
+        symbol: "KMX",
+        name: "Carmax Inc",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "CRL",
-        name: "Charles River Laboratories International, Inc.",
-        lastsale: 134.54,
-        MarketCap: 6560000000,
-        IPOyear: 2000,
-        Sector: "Health Care",
-        Industry: "Biotechnology: Commercial Physical & Biological Resarch",
-        Exchange: "NYSE"
+        symbol: "CCL",
+        name: "Carnival Corp.",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "CRM",
-        name: "Salesforce.com Inc",
-        lastsale: 154.5,
-        MarketCap: 120340000000,
-        IPOyear: 2004,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NYSE"
+        symbol: "CAT",
+        name: "Caterpillar Inc.",
+        sector: "Industrials"
       },
       {
-        symbol: "CTLT",
-        name: "Catalent, Inc.",
-        lastsale: 56.49,
-        MarketCap: 8230000000,
-        IPOyear: 2014,
-        Sector: "Health Care",
-        Industry: "Major Pharmaceuticals",
-        Exchange: "NYSE"
+        symbol: "CBOE",
+        name: "CBOE Holdings",
+        sector: "Financials"
       },
       {
-        symbol: "CTVA",
-        name: "Corteva, Inc.",
-        lastsale: 29.5,
-        MarketCap: 22090000000,
-        IPOyear: 2019,
-        Sector: "Consumer Non-Durables",
-        Industry: "Farming/Seeds/Milling",
-        Exchange: "NYSE"
+        symbol: "CBG",
+        name: "CBRE Group",
+        sector: "Real Estate"
       },
       {
-        symbol: "CVI",
-        name: "CVR Energy Inc.",
-        lastsale: 53.07,
-        MarketCap: 5340000000,
-        IPOyear: 2007,
-        Sector: "Energy",
-        Industry: "Integrated oil Companies",
-        Exchange: "NYSE"
+        symbol: "CBS",
+        name: "CBS Corp.",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "CVNA",
-        name: "Carvana Co.",
-        lastsale: 63.56,
-        MarketCap: 9590000000,
-        IPOyear: 2017,
-        Sector: "Consumer Durables",
-        Industry: "Automotive Aftermarket",
-        Exchange: "NYSE"
+        symbol: "CELG",
+        name: "Celgene Corp.",
+        sector: "Health Care"
+      },
+      {
+        symbol: "CNC",
+        name: "Centene Corporation",
+        sector: "Health Care"
+      },
+      {
+        symbol: "CNP",
+        name: "CenterPoint Energy",
+        sector: "Utilities"
+      },
+      {
+        symbol: "CTL",
+        name: "CenturyLink Inc",
+        sector: "Telecommunication Services"
+      },
+      {
+        symbol: "CERN",
+        name: "Cerner",
+        sector: "Health Care"
+      },
+      {
+        symbol: "CF",
+        name: "CF Industries Holdings Inc",
+        sector: "Materials"
+      },
+      {
+        symbol: "SCHW",
+        name: "Charles Schwab Corporation",
+        sector: "Financials"
+      },
+      {
+        symbol: "CHTR",
+        name: "Charter Communications",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "CHK",
+        name: "Chesapeake Energy",
+        sector: "Energy"
+      },
+      {
+        symbol: "CVX",
+        name: "Chevron Corp.",
+        sector: "Energy"
+      },
+      {
+        symbol: "CMG",
+        name: "Chipotle Mexican Grill",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "CB",
+        name: "Chubb Limited",
+        sector: "Financials"
+      },
+      {
+        symbol: "CHD",
+        name: "Church & Dwight",
+        sector: "Consumer Staples"
+      },
+      {
+        symbol: "CI",
+        name: "CIGNA Corp.",
+        sector: "Health Care"
+      },
+      {
+        symbol: "XEC",
+        name: "Cimarex Energy",
+        sector: "Energy"
+      },
+      {
+        symbol: "CINF",
+        name: "Cincinnati Financial",
+        sector: "Financials"
+      },
+      {
+        symbol: "CTAS",
+        name: "Cintas Corporation",
+        sector: "Industrials"
+      },
+      {
+        symbol: "CSCO",
+        name: "Cisco Systems",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "C",
+        name: "Citigroup Inc.",
+        sector: "Financials"
+      },
+      {
+        symbol: "CFG",
+        name: "Citizens Financial Group",
+        sector: "Financials"
+      },
+      {
+        symbol: "CTXS",
+        name: "Citrix Systems",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "CME",
+        name: "CME Group Inc.",
+        sector: "Financials"
+      },
+      {
+        symbol: "CMS",
+        name: "CMS Energy",
+        sector: "Utilities"
+      },
+      {
+        symbol: "KO",
+        name: "Coca-Cola Company (The)",
+        sector: "Consumer Staples"
+      },
+      {
+        symbol: "CTSH",
+        name: "Cognizant Technology Solutions",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "CL",
+        name: "Colgate-Palmolive",
+        sector: "Consumer Staples"
+      },
+      {
+        symbol: "CMCSA",
+        name: "Comcast Corp.",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "CMA",
+        name: "Comerica Inc.",
+        sector: "Financials"
+      },
+      {
+        symbol: "CAG",
+        name: "Conagra Brands",
+        sector: "Consumer Staples"
       },
       {
         symbol: "CXO",
-        name: "Concho Resources Inc.",
-        lastsale: 97.68,
-        MarketCap: 19590000000,
-        IPOyear: 2007,
-        Sector: "Energy",
-        Industry: "Oil & Gas Production",
-        Exchange: "NYSE"
+        name: "Concho Resources",
+        sector: "Energy"
       },
       {
-        symbol: "DATA",
-        name: "Tableau Software, Inc.",
-        lastsale: 169.53,
-        MarketCap: 14800000000,
-        IPOyear: 2013,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NYSE"
+        symbol: "COP",
+        name: "ConocoPhillips",
+        sector: "Energy"
       },
       {
-        symbol: "DD",
-        name: "DuPont de Nemours, Inc.",
-        lastsale: 72.16,
-        MarketCap: 54030000000,
-        IPOyear: 2017,
-        Sector: "Basic Industries",
-        Industry: "Major Chemicals",
-        Exchange: "NYSE"
+        symbol: "ED",
+        name: "Consolidated Edison",
+        sector: "Utilities"
       },
       {
-        symbol: "DEI",
-        name: "Douglas Emmett, Inc.",
-        lastsale: 40.82,
-        MarketCap: 7150000000,
-        IPOyear: 2006,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NYSE"
+        symbol: "STZ",
+        name: "Constellation Brands",
+        sector: "Consumer Staples"
       },
       {
-        symbol: "DELL",
-        name: "Dell Technologies Inc.",
-        lastsale: 57.74,
-        MarketCap: 41490000000,
-        IPOyear: 2018,
-        Sector: "Technology",
-        Industry: "Computer Manufacturing",
-        Exchange: "NYSE"
+        symbol: "GLW",
+        name: "Corning Inc.",
+        sector: "Information Technology"
       },
       {
-        symbol: "DG",
-        name: "Dollar General Corporation",
-        lastsale: 134.02,
-        MarketCap: 34620000000,
-        IPOyear: 2009,
-        Sector: "Consumer Services",
-        Industry: "Department/Specialty Retail Stores",
-        Exchange: "NYSE"
+        symbol: "COST",
+        name: "Costco Wholesale Corp.",
+        sector: "Consumer Staples"
       },
       {
-        symbol: "DLB",
-        name: "Dolby Laboratories",
-        lastsale: 68.1,
-        MarketCap: 6920000000,
-        IPOyear: 2005,
-        Sector: "Miscellaneous",
-        Industry: "Multi-Sector Companies",
-        Exchange: "NYSE"
+        symbol: "COTY",
+        name: "Coty, Inc",
+        sector: "Consumer Staples"
+      },
+      {
+        symbol: "CCI",
+        name: "Crown Castle International Corp.",
+        sector: "Real Estate"
+      },
+      {
+        symbol: "CSRA",
+        name: "CSRA Inc.",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "CSX",
+        name: "CSX Corp.",
+        sector: "Industrials"
+      },
+      {
+        symbol: "CMI",
+        name: "Cummins Inc.",
+        sector: "Industrials"
+      },
+      {
+        symbol: "CVS",
+        name: "CVS Health",
+        sector: "Consumer Staples"
+      },
+      {
+        symbol: "DHI",
+        name: "D. R. Horton",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "DHR",
+        name: "Danaher Corp.",
+        sector: "Health Care"
+      },
+      {
+        symbol: "DRI",
+        name: "Darden Restaurants",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "DVA",
+        name: "DaVita Inc.",
+        sector: "Health Care"
+      },
+      {
+        symbol: "DE",
+        name: "Deere & Co.",
+        sector: "Industrials"
+      },
+      {
+        symbol: "DAL",
+        name: "Delta Air Lines Inc.",
+        sector: "Industrials"
+      },
+      {
+        symbol: "XRAY",
+        name: "Dentsply Sirona",
+        sector: "Health Care"
+      },
+      {
+        symbol: "DVN",
+        name: "Devon Energy Corp.",
+        sector: "Energy"
       },
       {
         symbol: "DLR",
-        name: "Digital Realty Trust, Inc.",
-        lastsale: 114.36,
-        MarketCap: 23820000000,
-        IPOyear: 2004,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NYSE"
+        name: "Digital Realty Trust Inc",
+        sector: "Real Estate"
       },
       {
-        symbol: "DOW",
-        name: "Dow Inc.",
-        lastsale: 48.44,
-        MarketCap: 36000000000,
-        IPOyear: 2019,
-        Sector: "Basic Industries",
-        Industry: "Major Chemicals",
-        Exchange: "NYSE"
+        symbol: "DFS",
+        name: "Discover Financial Services",
+        sector: "Financials"
       },
       {
-        symbol: "DPZ",
-        name: "Domino&#39;s Pizza Inc",
-        lastsale: 244.53,
-        MarketCap: 10080000000,
-        IPOyear: 2004,
-        Sector: "Consumer Non-Durables",
-        Industry: "Food Distributors",
-        Exchange: "NYSE"
+        symbol: "DISCA",
+        name: "Discovery Communications-A",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "EBR",
-        name: "Centrais Electricas Brasileiras S.A.- Eletrobras",
-        lastsale: 10.26,
-        MarketCap: 13880000000,
-        IPOyear: 2016,
-        Sector: "Public Utilities",
-        Industry: "Electric Utilities: Central",
-        Exchange: "NYSE"
+        symbol: "DISCK",
+        name: "Discovery Communications-C",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "EDU",
-        name: "New Oriental Education & Technology Group, Inc.",
-        lastsale: 104.31,
-        MarketCap: 16510000000,
-        IPOyear: 2006,
-        Sector: "Consumer Services",
-        Industry: "Other Consumer Services",
-        Exchange: "NYSE"
+        symbol: "DISH",
+        name: "Dish Network",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "EL",
-        name: "Estee Lauder Companies, Inc. (The)",
-        lastsale: 184.19,
-        MarketCap: 66650000000,
-        IPOyear: 1995,
-        Sector: "Consumer Non-Durables",
-        Industry: "Package Goods/Cosmetics",
-        Exchange: "NYSE"
+        symbol: "DG",
+        name: "Dollar General",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "ELAN",
-        name: "Elanco Animal Health Incorporated",
-        lastsale: 32.96,
-        MarketCap: 12050000000,
-        IPOyear: 2018,
-        Sector: "Health Care",
-        Industry: "Major Pharmaceuticals",
-        Exchange: "NYSE"
+        symbol: "DLTR",
+        name: "Dollar Tree",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "ENBL",
-        name: "Enable Midstream Partners, LP",
-        lastsale: 13.93,
-        MarketCap: 6060000000,
-        IPOyear: 2014,
-        Sector: "Public Utilities",
-        Industry: "Natural Gas Distribution",
-        Exchange: "NYSE"
+        symbol: "D",
+        name: "Dominion Energy",
+        sector: "Utilities"
       },
       {
-        symbol: "ENIC",
-        name: "Enel Chile S.A.",
-        lastsale: 4.6,
-        MarketCap: 6360000000,
-        IPOyear: 2016,
-        Sector: "Public Utilities",
-        Industry: "Electric Utilities: Central",
-        Exchange: "NYSE"
+        symbol: "DOV",
+        name: "Dover Corp.",
+        sector: "Industrials"
       },
       {
-        symbol: "EPAM",
-        name: "EPAM Systems, Inc.",
-        lastsale: 193.79,
-        MarketCap: 10590000000,
-        IPOyear: 2012,
-        Sector: "Technology",
-        Industry: "EDP Services",
-        Exchange: "NYSE"
+        symbol: "DWDP",
+        name: "DowDuPont",
+        sector: "Materials"
       },
       {
-        symbol: "EPR",
-        name: "EPR Properties",
-        lastsale: 74.43,
-        MarketCap: 5620000000,
-        IPOyear: 1997,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NYSE"
+        symbol: "DPS",
+        name: "Dr Pepper Snapple Group",
+        sector: "Consumer Staples"
       },
       {
-        symbol: "EQH",
-        name: "AXA Equitable Holdings, Inc.",
-        lastsale: 22.48,
-        MarketCap: 11040000000,
-        IPOyear: 2018,
-        Sector: "Finance",
-        Industry: "Specialty Insurers",
-        Exchange: "NYSE"
+        symbol: "DTE",
+        name: "DTE Energy Co.",
+        sector: "Utilities"
       },
       {
-        symbol: "EQM",
-        name: "EQM Midstream Partners, LP",
-        lastsale: 38.51,
-        MarketCap: 7990000000,
-        IPOyear: 2012,
-        Sector: "Public Utilities",
-        Industry: "Natural Gas Distribution",
-        Exchange: "NYSE"
+        symbol: "DUK",
+        name: "Duke Energy",
+        sector: "Utilities"
+      },
+      {
+        symbol: "DRE",
+        name: "Duke Realty Corp",
+        sector: "Real Estate"
+      },
+      {
+        symbol: "DXC",
+        name: "DXC Technology",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "ETFC",
+        name: "E*Trade",
+        sector: "Financials"
+      },
+      {
+        symbol: "EMN",
+        name: "Eastman Chemical",
+        sector: "Materials"
+      },
+      {
+        symbol: "ETN",
+        name: "Eaton Corporation",
+        sector: "Industrials"
+      },
+      {
+        symbol: "EBAY",
+        name: "eBay Inc.",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "ECL",
+        name: "Ecolab Inc.",
+        sector: "Materials"
+      },
+      {
+        symbol: "EIX",
+        name: "Edison Int'l",
+        sector: "Utilities"
+      },
+      {
+        symbol: "EW",
+        name: "Edwards Lifesciences",
+        sector: "Health Care"
+      },
+      {
+        symbol: "EA",
+        name: "Electronic Arts",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "EMR",
+        name: "Emerson Electric Company",
+        sector: "Industrials"
+      },
+      {
+        symbol: "ETR",
+        name: "Entergy Corp.",
+        sector: "Utilities"
+      },
+      {
+        symbol: "EVHC",
+        name: "Envision Healthcare",
+        sector: "Health Care"
+      },
+      {
+        symbol: "EOG",
+        name: "EOG Resources",
+        sector: "Energy"
+      },
+      {
+        symbol: "EQT",
+        name: "EQT Corporation",
+        sector: "Energy"
+      },
+      {
+        symbol: "EFX",
+        name: "Equifax Inc.",
+        sector: "Industrials"
+      },
+      {
+        symbol: "EQIX",
+        name: "Equinix",
+        sector: "Real Estate"
+      },
+      {
+        symbol: "EQR",
+        name: "Equity Residential",
+        sector: "Real Estate"
       },
       {
         symbol: "ESS",
         name: "Essex Property Trust, Inc.",
-        lastsale: 302.22,
-        MarketCap: 19960000000,
-        IPOyear: 1994,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NYSE"
+        sector: "Real Estate"
       },
       {
-        symbol: "ESTC",
-        name: "Elastic N.V.",
-        lastsale: 98.83,
-        MarketCap: 7450000000,
-        IPOyear: 2018,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NYSE"
+        symbol: "EL",
+        name: "Estee Lauder Cos.",
+        sector: "Consumer Staples"
       },
       {
-        symbol: "ET",
-        name: "Energy Transfer L.P.",
-        lastsale: 14.38,
-        MarketCap: 37670000000,
-        IPOyear: 1996,
-        Sector: "Public Utilities",
-        Industry: "Natural Gas Distribution",
-        Exchange: "NYSE"
+        symbol: "RE",
+        name: "Everest Re Group Ltd.",
+        sector: "Financials"
       },
       {
-        symbol: "EVRG",
-        name: "Evergy, Inc.",
-        lastsale: 60.49,
-        MarketCap: 14770000000,
-        IPOyear: 2018,
-        Sector: "Public Utilities",
-        Industry: "Power Generation",
-        Exchange: "NYSE"
+        symbol: "ES",
+        name: "Eversource Energy",
+        sector: "Utilities"
+      },
+      {
+        symbol: "EXC",
+        name: "Exelon Corp.",
+        sector: "Utilities"
+      },
+      {
+        symbol: "EXPE",
+        name: "Expedia Inc.",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "EXPD",
+        name: "Expeditors International",
+        sector: "Industrials"
+      },
+      {
+        symbol: "ESRX",
+        name: "Express Scripts",
+        sector: "Health Care"
       },
       {
         symbol: "EXR",
-        name: "Extra Space Storage Inc",
-        lastsale: 112.39,
-        MarketCap: 14440000000,
-        IPOyear: 2004,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NYSE"
+        name: "Extra Space Storage",
+        sector: "Real Estate"
       },
       {
-        symbol: "FCAU",
-        name: "Fiat Chrysler Automobiles N.V.",
-        lastsale: 13.19,
-        MarketCap: 26070000000,
-        IPOyear: 2014,
-        Sector: "Capital Goods",
-        Industry: "Auto Manufacturing",
-        Exchange: "NYSE"
+        symbol: "XOM",
+        name: "Exxon Mobil Corp.",
+        sector: "Energy"
       },
       {
-        symbol: "FDS",
-        name: "FactSet Research Systems Inc.",
-        lastsale: 277.3,
-        MarketCap: 10610000000,
-        IPOyear: 1996,
-        Sector: "Technology",
-        Industry: "Computer Software: Programming, Data Processing",
-        Exchange: "NYSE"
+        symbol: "FFIV",
+        name: "F5 Networks",
+        sector: "Information Technology"
       },
       {
-        symbol: "FLT",
-        name: "FleetCor Technologies, Inc.",
-        lastsale: 284.17,
-        MarketCap: 24490000000,
-        IPOyear: 2010,
-        Sector: "Miscellaneous",
-        Industry: "Business Services",
-        Exchange: "NYSE"
+        symbol: "FB",
+        name: "Facebook, Inc.",
+        sector: "Information Technology"
       },
       {
-        symbol: "FNF",
-        name: "Fidelity National Financial, Inc.",
-        lastsale: 42.88,
-        MarketCap: 11770000000,
-        IPOyear: 2014,
-        Sector: "Finance",
-        Industry: "Specialty Insurers",
-        Exchange: "NYSE"
+        symbol: "FAST",
+        name: "Fastenal Co",
+        sector: "Industrials"
       },
       {
-        symbol: "FTCH",
-        name: "Farfetch Limited",
-        lastsale: 20.1,
-        MarketCap: 6120000000,
-        IPOyear: 2018,
-        Sector: "Miscellaneous",
-        Industry: "Business Services",
-        Exchange: "NYSE"
+        symbol: "FRT",
+        name: "Federal Realty Investment Trust",
+        sector: "Real Estate"
       },
       {
-        symbol: "FTS",
-        name: "Fortis Inc.",
-        lastsale: 39.42,
-        MarketCap: 17180000000,
-        IPOyear: 2016,
-        Sector: "Public Utilities",
-        Industry: "Electric Utilities: Central",
-        Exchange: "NYSE"
+        symbol: "FDX",
+        name: "FedEx Corporation",
+        sector: "Industrials"
+      },
+      {
+        symbol: "FIS",
+        name: "Fidelity National Information Services",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "FITB",
+        name: "Fifth Third Bancorp",
+        sector: "Financials"
+      },
+      {
+        symbol: "FE",
+        name: "FirstEnergy Corp",
+        sector: "Utilities"
+      },
+      {
+        symbol: "FISV",
+        name: "Fiserv Inc",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "FLIR",
+        name: "FLIR Systems",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "FLS",
+        name: "Flowserve Corporation",
+        sector: "Industrials"
+      },
+      {
+        symbol: "FLR",
+        name: "Fluor Corp.",
+        sector: "Industrials"
+      },
+      {
+        symbol: "FMC",
+        name: "FMC Corporation",
+        sector: "Materials"
+      },
+      {
+        symbol: "FL",
+        name: "Foot Locker Inc",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "F",
+        name: "Ford Motor",
+        sector: "Consumer Discretionary"
       },
       {
         symbol: "FTV",
-        name: "Fortive Corporation",
-        lastsale: 76.05,
-        MarketCap: 25520000000,
-        IPOyear: 2016,
-        Sector: "Capital Goods",
-        Industry: "Industrial Machinery/Components",
-        Exchange: "NYSE"
+        name: "Fortive Corp",
+        sector: "Industrials"
       },
       {
-        symbol: "G",
-        name: "Genpact Limited",
-        lastsale: 39.68,
-        MarketCap: 7550000000,
-        IPOyear: 2007,
-        Sector: "Consumer Services",
-        Industry: "Professional Services",
-        Exchange: "NYSE"
+        symbol: "FBHS",
+        name: "Fortune Brands Home & Security",
+        sector: "Industrials"
       },
       {
-        symbol: "GDDY",
-        name: "GoDaddy Inc.",
-        lastsale: 73.38,
-        MarketCap: 13000000000,
-        IPOyear: 2015,
-        Sector: "Technology",
-        Industry: "EDP Services",
-        Exchange: "NYSE"
+        symbol: "BEN",
+        name: "Franklin Resources",
+        sector: "Financials"
       },
       {
-        symbol: "GDI",
-        name: "Gardner Denver Holdings, Inc.",
-        lastsale: 32.97,
-        MarketCap: 6660000000,
-        IPOyear: 2017,
-        Sector: "Technology",
-        Industry: "Industrial Machinery/Components",
-        Exchange: "NYSE"
+        symbol: "FCX",
+        name: "Freeport-McMoRan Inc.",
+        sector: "Materials"
       },
       {
-        symbol: "GIL",
-        name: "Gildan Activewear, Inc.",
-        lastsale: 39.37,
-        MarketCap: 8020000000,
-        IPOyear: 1998,
-        Sector: "Consumer Non-Durables",
-        Industry: "Apparel",
-        Exchange: "NYSE"
+        symbol: "GPS",
+        name: "Gap Inc.",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "GRMN",
+        name: "Garmin Ltd.",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "IT",
+        name: "Gartner Inc",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "GD",
+        name: "General Dynamics",
+        sector: "Industrials"
+      },
+      {
+        symbol: "GE",
+        name: "General Electric",
+        sector: "Industrials"
+      },
+      {
+        symbol: "GGP",
+        name: "General Growth Properties Inc.",
+        sector: "Real Estate"
+      },
+      {
+        symbol: "GIS",
+        name: "General Mills",
+        sector: "Consumer Staples"
       },
       {
         symbol: "GM",
-        name: "General Motors Company",
-        lastsale: 40.34,
-        MarketCap: 58560000000,
-        IPOyear: 2010,
-        Sector: "Capital Goods",
-        Industry: "Auto Manufacturing",
-        Exchange: "NYSE"
+        name: "General Motors",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "GRUB",
-        name: "GrubHub Inc.",
-        lastsale: 67.63,
-        MarketCap: 6170000000,
-        IPOyear: 2014,
-        Sector: "Miscellaneous",
-        Industry: "Business Services",
-        Exchange: "NYSE"
+        symbol: "GPC",
+        name: "Genuine Parts",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "GILD",
+        name: "Gilead Sciences",
+        sector: "Health Care"
+      },
+      {
+        symbol: "GPN",
+        name: "Global Payments Inc.",
+        sector: "Information Technology"
       },
       {
         symbol: "GS",
-        name: "Goldman Sachs Group, Inc. (The)",
-        lastsale: 220.13,
-        MarketCap: 80530000000,
-        IPOyear: 1999,
-        Sector: "Finance",
-        Industry: "Investment Bankers/Brokers/Service",
-        Exchange: "NYSE"
+        name: "Goldman Sachs Group",
+        sector: "Financials"
       },
       {
-        symbol: "GWRE",
-        name: "Guidewire Software, Inc.",
-        lastsale: 102.08,
-        MarketCap: 8350000000,
-        IPOyear: 2012,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NYSE"
+        symbol: "GT",
+        name: "Goodyear Tire & Rubber",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "H",
-        name: "Hyatt Hotels Corporation",
-        lastsale: 77.35,
-        MarketCap: 8150000000,
-        IPOyear: 2009,
-        Sector: "Consumer Services",
-        Industry: "Hotels/Resorts",
-        Exchange: "NYSE"
+        symbol: "GWW",
+        name: "Grainger (W.W.) Inc.",
+        sector: "Industrials"
       },
       {
-        symbol: "HAE",
-        name: "Haemonetics Corporation",
-        lastsale: 122.08,
-        MarketCap: 6260000000,
-        IPOyear: 1991,
-        Sector: "Health Care",
-        Industry: "Medical/Dental Instruments",
-        Exchange: "NYSE"
+        symbol: "HAL",
+        name: "Halliburton Co.",
+        sector: "Energy"
+      },
+      {
+        symbol: "HBI",
+        name: "Hanesbrands Inc",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "HOG",
+        name: "Harley-Davidson",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "HRS",
+        name: "Harris Corporation",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "HIG",
+        name: "Hartford Financial Svc.Gp.",
+        sector: "Financials"
+      },
+      {
+        symbol: "HAS",
+        name: "Hasbro Inc.",
+        sector: "Consumer Discretionary"
       },
       {
         symbol: "HCA",
-        name: "HCA Healthcare, Inc.",
-        lastsale: 133.51,
-        MarketCap: 45700000000,
-        IPOyear: 2011,
-        Sector: "Health Care",
-        Industry: "Hospital/Nursing Management",
-        Exchange: "NYSE"
+        name: "HCA Holdings",
+        sector: "Health Care"
       },
       {
-        symbol: "HDB",
-        name: "HDFC Bank Limited",
-        lastsale: 114.98,
-        MarketCap: 104800000000,
-        IPOyear: 2001,
-        Sector: "Finance",
-        Industry: "Commercial Banks",
-        Exchange: "NYSE"
+        symbol: "HCP",
+        name: "HCP Inc.",
+        sector: "Real Estate"
       },
       {
-        symbol: "HLF",
-        name: "Herbalife Nutrition Ltd.",
-        lastsale: 41.02,
-        MarketCap: 6200000000,
-        IPOyear: 2004,
-        Sector: "Health Care",
-        Industry: "Other Pharmaceuticals",
-        Exchange: "NYSE"
+        symbol: "HP",
+        name: "Helmerich & Payne",
+        sector: "Energy"
       },
       {
-        symbol: "HLT",
-        name: "Hilton Worldwide Holdings Inc.",
-        lastsale: 96.55,
-        MarketCap: 27700000000,
-        IPOyear: 2016,
-        Sector: "Consumer Services",
-        Industry: "Hotels/Resorts",
-        Exchange: "NYSE"
+        symbol: "HSIC",
+        name: "Henry Schein",
+        sector: "Health Care"
       },
       {
-        symbol: "HNP",
-        name: "Huaneng Power International, Inc.",
-        lastsale: 23.35,
-        MarketCap: 9160000000,
-        IPOyear: 1994,
-        Sector: "Public Utilities",
-        Industry: "Electric Utilities: Central",
-        Exchange: "NYSE"
+        symbol: "HES",
+        name: "Hess Corporation",
+        sector: "Energy"
       },
       {
         symbol: "HPE",
-        name: "Hewlett Packard Enterprise Company",
-        lastsale: 14.37,
-        MarketCap: 19240000000,
-        IPOyear: 2015,
-        Sector: "Technology",
-        Industry: "Computer Manufacturing",
-        Exchange: "NYSE"
+        name: "Hewlett Packard Enterprise",
+        sector: "Information Technology"
       },
       {
-        symbol: "HPP",
-        name: "Hudson Pacific Properties, Inc.",
-        lastsale: 35.3,
-        MarketCap: 5450000000,
-        IPOyear: 2010,
-        Sector: "Finance",
-        Industry: "Real Estate",
-        Exchange: "NYSE"
+        symbol: "HLT",
+        name: "Hilton Worldwide Holdings Inc",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "HUBB",
-        name: "Hubbell Inc",
-        lastsale: 129.88,
-        MarketCap: 7080000000,
-        IPOyear: 2015,
-        Sector: "Capital Goods",
-        Industry: "Electrical Products",
-        Exchange: "NYSE"
+        symbol: "HOLX",
+        name: "Hologic",
+        sector: "Health Care"
       },
       {
-        symbol: "HUBS",
-        name: "HubSpot, Inc.",
-        lastsale: 178.72,
-        MarketCap: 7520000000,
-        IPOyear: 2014,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NYSE"
+        symbol: "HD",
+        name: "Home Depot",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "IAA",
-        name: "IAA, Inc.",
-        lastsale: 46.75,
-        MarketCap: 6240000000,
-        IPOyear: 2019,
-        Sector: "Consumer Durables",
-        Industry: "Automotive Aftermarket",
-        Exchange: "NYSE"
+        symbol: "HON",
+        name: "Honeywell Int'l Inc.",
+        sector: "Industrials"
       },
       {
-        symbol: "ICE",
-        name: "Intercontinental Exchange Inc.",
-        lastsale: 87.86,
-        MarketCap: 49540000000,
-        IPOyear: 2005,
-        Sector: "Finance",
-        Industry: "Investment Bankers/Brokers/Service",
-        Exchange: "NYSE"
+        symbol: "HRL",
+        name: "Hormel Foods Corp.",
+        sector: "Consumer Staples"
       },
       {
-        symbol: "ICL",
-        name: "Israel Chemicals Shs",
-        lastsale: 5.44,
-        MarketCap: 6960000000,
-        IPOyear: 2014,
-        Sector: "Basic Industries",
-        Industry: "Agricultural Chemicals",
-        Exchange: "NYSE"
+        symbol: "HST",
+        name: "Host Hotels & Resorts",
+        sector: "Real Estate"
       },
       {
-        symbol: "IEX",
-        name: "IDEX Corporation",
-        lastsale: 168.22,
-        MarketCap: 12760000000,
-        IPOyear: 1989,
-        Sector: "Capital Goods",
-        Industry: "Fluid Controls",
-        Exchange: "NYSE"
+        symbol: "HPQ",
+        name: "HP Inc.",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "HUM",
+        name: "Humana Inc.",
+        sector: "Health Care"
+      },
+      {
+        symbol: "HBAN",
+        name: "Huntington Bancshares",
+        sector: "Financials"
+      },
+      {
+        symbol: "HII",
+        name: "Huntington Ingalls Industries",
+        sector: "Industrials"
+      },
+      {
+        symbol: "IDXX",
+        name: "IDEXX Laboratories",
+        sector: "Health Care"
       },
       {
         symbol: "INFO",
         name: "IHS Markit Ltd.",
-        lastsale: 64.42,
-        MarketCap: 25840000000,
-        IPOyear: 1996,
-        Sector: "Technology",
-        Industry: "Computer Software: Programming, Data Processing",
-        Exchange: "NYSE"
+        sector: "Industrials"
       },
       {
-        symbol: "ING",
-        name: "ING Group, N.V.",
-        lastsale: 11.1,
-        MarketCap: 43240000000,
-        IPOyear: 1997,
-        Sector: "Finance",
-        Industry: "Commercial Banks",
-        Exchange: "NYSE"
+        symbol: "ITW",
+        name: "Illinois Tool Works",
+        sector: "Industrials"
       },
       {
-        symbol: "INVH",
-        name: "Invitation Homes Inc.",
-        lastsale: 27.47,
-        MarketCap: 14420000000,
-        IPOyear: 2017,
-        Sector: "Finance",
-        Industry: "Real Estate",
-        Exchange: "NYSE"
+        symbol: "ILMN",
+        name: "Illumina Inc",
+        sector: "Health Care"
       },
       {
-        symbol: "INXN",
-        name: "InterXion Holding N.V.",
-        lastsale: 75.3,
-        MarketCap: 5760000000,
-        IPOyear: 2011,
-        Sector: "Technology",
-        Industry: "Computer Software: Programming, Data Processing",
-        Exchange: "NYSE"
+        symbol: "INCY",
+        name: "Incyte",
+        sector: "Health Care"
+      },
+      {
+        symbol: "IR",
+        name: "Ingersoll-Rand PLC",
+        sector: "Industrials"
+      },
+      {
+        symbol: "INTC",
+        name: "Intel Corp.",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "ICE",
+        name: "Intercontinental Exchange",
+        sector: "Financials"
+      },
+      {
+        symbol: "IBM",
+        name: "International Business Machines",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "IP",
+        name: "International Paper",
+        sector: "Materials"
+      },
+      {
+        symbol: "IPG",
+        name: "Interpublic Group",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "IFF",
+        name: "Intl Flavors & Fragrances",
+        sector: "Materials"
+      },
+      {
+        symbol: "INTU",
+        name: "Intuit Inc.",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "ISRG",
+        name: "Intuitive Surgical Inc.",
+        sector: "Health Care"
+      },
+      {
+        symbol: "IVZ",
+        name: "Invesco Ltd.",
+        sector: "Financials"
       },
       {
         symbol: "IQV",
-        name: "IQVIA Holdings, Inc.",
-        lastsale: 159.17,
-        MarketCap: 31180000000,
-        IPOyear: 2013,
-        Sector: "Health Care",
-        Industry: "Biotechnology: Commercial Physical & Biological Resarch",
-        Exchange: "NYSE"
+        name: "IQVIA Holdings Inc.",
+        sector: "Health Care"
       },
       {
-        symbol: "IT",
-        name: "Gartner, Inc.",
-        lastsale: 139.33,
-        MarketCap: 12560000000,
-        IPOyear: 1993,
-        Sector: "Consumer Services",
-        Industry: "Other Consumer Services",
-        Exchange: "NYSE"
+        symbol: "IRM",
+        name: "Iron Mountain Incorporated",
+        sector: "Real Estate"
       },
       {
-        symbol: "ITT",
-        name: "ITT Inc.",
-        lastsale: 62.42,
-        MarketCap: 5480000000,
-        IPOyear: 2011,
-        Sector: "Capital Goods",
-        Industry: "Fluid Controls",
-        Exchange: "NYSE"
+        symbol: "JBHT",
+        name: "J. B. Hunt Transport Services",
+        sector: "Industrials"
       },
       {
-        symbol: "JBGS",
-        name: "JBG SMITH Properties",
-        lastsale: 39.13,
-        MarketCap: 5250000000,
-        IPOyear: 2017,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NYSE"
+        symbol: "JEC",
+        name: "Jacobs Engineering Group",
+        sector: "Industrials"
+      },
+      {
+        symbol: "SJM",
+        name: "JM Smucker",
+        sector: "Consumer Staples"
+      },
+      {
+        symbol: "JNJ",
+        name: "Johnson & Johnson",
+        sector: "Health Care"
+      },
+      {
+        symbol: "JCI",
+        name: "Johnson Controls International",
+        sector: "Industrials"
+      },
+      {
+        symbol: "JPM",
+        name: "JPMorgan Chase & Co.",
+        sector: "Financials"
       },
       {
         symbol: "JNPR",
-        name: "Juniper Networks, Inc.",
-        lastsale: 27.02,
-        MarketCap: 9300000000,
-        IPOyear: 1999,
-        Sector: "Technology",
-        Industry: "Computer Communications Equipment",
-        Exchange: "NYSE"
+        name: "Juniper Networks",
+        sector: "Information Technology"
       },
       {
-        symbol: "KEP",
-        name: "Korea Electric Power Corporation",
-        lastsale: 11.73,
-        MarketCap: 15060000000,
-        IPOyear: 1994,
-        Sector: "Public Utilities",
-        Industry: "Electric Utilities: Central",
-        Exchange: "NYSE"
+        symbol: "KSU",
+        name: "Kansas City Southern",
+        sector: "Industrials"
       },
       {
-        symbol: "KEYS",
-        name: "Keysight Technologies Inc.",
-        lastsale: 89.52,
-        MarketCap: 16850000000,
-        IPOyear: 2014,
-        Sector: "Capital Goods",
-        Industry: "Industrial Machinery/Components",
-        Exchange: "NYSE"
+        symbol: "K",
+        name: "Kellogg Co.",
+        sector: "Consumer Staples"
+      },
+      {
+        symbol: "KEY",
+        name: "KeyCorp",
+        sector: "Financials"
+      },
+      {
+        symbol: "KMB",
+        name: "Kimberly-Clark",
+        sector: "Consumer Staples"
+      },
+      {
+        symbol: "KIM",
+        name: "Kimco Realty",
+        sector: "Real Estate"
       },
       {
         symbol: "KMI",
-        name: "Kinder Morgan, Inc.",
-        lastsale: 20.62,
-        MarketCap: 46680000000,
-        IPOyear: 2011,
-        Sector: "Public Utilities",
-        Industry: "Natural Gas Distribution",
-        Exchange: "NYSE"
+        name: "Kinder Morgan",
+        sector: "Energy"
       },
       {
-        symbol: "KNX",
-        name: "Knight Transportation, Inc.",
-        lastsale: 35.84,
-        MarketCap: 6200000000,
-        IPOyear: 2017,
-        Sector: "Transportation",
-        Industry: "Trucking Freight/Courier Services",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "KOF",
-        name: "Coca Cola Femsa S.A.B. de C.V.",
-        lastsale: 61.34,
-        MarketCap: 12890000000,
-        IPOyear: 1993,
-        Sector: "Consumer Non-Durables",
-        Industry: "Beverages (Production/Distribution)",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "KRC",
-        name: "Kilroy Realty Corporation",
-        lastsale: 79.46,
-        MarketCap: 8020000000,
-        IPOyear: 1997,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NYSE"
+        symbol: "KLAC",
+        name: "KLA-Tencor Corp.",
+        sector: "Information Technology"
       },
       {
         symbol: "KSS",
-        name: "Kohl&#39;s Corporation",
-        lastsale: 53.86,
-        MarketCap: 8730000000,
-        IPOyear: 1992,
-        Sector: "Consumer Services",
-        Industry: "Department/Specialty Retail Stores",
-        Exchange: "NYSE"
+        name: "Kohl's Corp.",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "LEVI",
-        name: "Levi Strauss & Co",
-        lastsale: 19.06,
-        MarketCap: 7480000000,
-        IPOyear: 2019,
-        Sector: "Consumer Non-Durables",
-        Industry: "Apparel",
-        Exchange: "NYSE"
+        symbol: "KHC",
+        name: "Kraft Heinz Co",
+        sector: "Consumer Staples"
       },
       {
-        symbol: "LFC",
-        name: "China Life Insurance Company Limited",
-        lastsale: 12.74,
-        MarketCap: 72020000000,
-        IPOyear: 2003,
-        Sector: "Finance",
-        Industry: "Life Insurance",
-        Exchange: "NYSE"
+        symbol: "KR",
+        name: "Kroger Co.",
+        sector: "Consumer Staples"
       },
       {
-        symbol: "LII",
-        name: "Lennox International, Inc.",
-        lastsale: 256.48,
-        MarketCap: 9930000000,
-        IPOyear: 1999,
-        Sector: "Capital Goods",
-        Industry: "Industrial Machinery/Components",
-        Exchange: "NYSE"
+        symbol: "LB",
+        name: "L Brands Inc.",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "LIN",
-        name: "Linde plc",
-        lastsale: 191.28,
-        MarketCap: 103820000000,
-        IPOyear: 2018,
-        Sector: "Basic Industries",
-        Industry: "Major Chemicals",
-        Exchange: "NYSE"
+        symbol: "LLL",
+        name: "L-3 Communications Holdings",
+        sector: "Industrials"
       },
       {
-        symbol: "LN",
-        name: "LINE Corporation",
-        lastsale: 31.81,
-        MarketCap: 7610000000,
-        IPOyear: 2016,
-        Sector: "Technology",
-        Industry: "Computer Software: Programming, Data Processing",
-        Exchange: "NYSE"
+        symbol: "LH",
+        name: "Laboratory Corp. of America Holding",
+        sector: "Health Care"
       },
       {
-        symbol: "LVS",
-        name: "Las Vegas Sands Corp.",
-        lastsale: 60.44,
-        MarketCap: 46530000000,
-        IPOyear: 2004,
-        Sector: "Consumer Services",
-        Industry: "Hotels/Resorts",
-        Exchange: "NYSE"
+        symbol: "LRCX",
+        name: "Lam Research",
+        sector: "Information Technology"
       },
       {
-        symbol: "LW",
-        name: "Lamb Weston Holdings, Inc.",
-        lastsale: 67.12,
-        MarketCap: 9800000000,
-        IPOyear: 2016,
-        Sector: "Consumer Non-Durables",
-        Industry: "Packaged Foods",
-        Exchange: "NYSE"
+        symbol: "LEG",
+        name: "Leggett & Platt",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "MA",
-        name: "Mastercard Incorporated",
-        lastsale: 272.27,
-        MarketCap: 276230000000,
-        IPOyear: 2006,
-        Sector: "Miscellaneous",
-        Industry: "Business Services",
-        Exchange: "NYSE"
+        symbol: "LEN",
+        name: "Lennar Corp.",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "MAA",
-        name: "Mid-America Apartment Communities, Inc.",
-        lastsale: 117.84,
-        MarketCap: 13430000000,
-        IPOyear: 1994,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NYSE"
+        symbol: "LUK",
+        name: "Leucadia National Corp.",
+        sector: "Financials"
       },
       {
-        symbol: "MET",
-        name: "MetLife, Inc.",
-        lastsale: 49.42,
-        MarketCap: 46970000000,
-        IPOyear: 2000,
-        Sector: "Finance",
-        Industry: "Life Insurance",
-        Exchange: "NYSE"
+        symbol: "LLY",
+        name: "Lilly (Eli) & Co.",
+        sector: "Health Care"
       },
       {
-        symbol: "MFGP",
-        name: "Micro Focus Intl PLC",
-        lastsale: 20.86,
-        MarketCap: 7160000000,
-        IPOyear: 2017,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NYSE"
+        symbol: "LNC",
+        name: "Lincoln National",
+        sector: "Financials"
       },
       {
-        symbol: "MGP",
-        name: "MGM Growth Properties LLC",
-        lastsale: 29.86,
-        MarketCap: 8950000000,
-        IPOyear: 2016,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NYSE"
+        symbol: "LKQ",
+        name: "LKQ Corporation",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "MKL",
-        name: "Markel Corporation",
-        lastsale: 1113.93,
-        MarketCap: 15400000000,
-        IPOyear: 1986,
-        Sector: "Finance",
-        Industry: "Property-Casualty Insurers",
-        Exchange: "NYSE"
+        symbol: "LMT",
+        name: "Lockheed Martin Corp.",
+        sector: "Industrials"
+      },
+      {
+        symbol: "L",
+        name: "Loews Corp.",
+        sector: "Financials"
+      },
+      {
+        symbol: "LOW",
+        name: "Lowe's Cos.",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "LYB",
+        name: "LyondellBasell",
+        sector: "Materials"
+      },
+      {
+        symbol: "MTB",
+        name: "M&T Bank Corp.",
+        sector: "Financials"
+      },
+      {
+        symbol: "MAC",
+        name: "Macerich",
+        sector: "Real Estate"
+      },
+      {
+        symbol: "M",
+        name: "Macy's Inc.",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "MRO",
+        name: "Marathon Oil Corp.",
+        sector: "Energy"
+      },
+      {
+        symbol: "MPC",
+        name: "Marathon Petroleum",
+        sector: "Energy"
+      },
+      {
+        symbol: "MAR",
+        name: "Marriott Int'l.",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "MMC",
+        name: "Marsh & McLennan",
+        sector: "Financials"
       },
       {
         symbol: "MLM",
-        name: "Martin Marietta Materials, Inc.",
-        lastsale: 247.75,
-        MarketCap: 15460000000,
-        IPOyear: 1994,
-        Sector: "Basic Industries",
-        Industry: "Mining & Quarrying of Nonmetallic Minerals (No Fuels)",
-        Exchange: "NYSE"
+        name: "Martin Marietta Materials",
+        sector: "Materials"
       },
       {
-        symbol: "MOH",
-        name: "Molina Healthcare Inc",
-        lastsale: 132.78,
-        MarketCap: 8310000000,
-        IPOyear: 2003,
-        Sector: "Health Care",
-        Industry: "Medical Specialities",
-        Exchange: "NYSE"
+        symbol: "MAS",
+        name: "Masco Corp.",
+        sector: "Industrials"
       },
       {
-        symbol: "MPLX",
-        name: "MPLX LP",
-        lastsale: 29.35,
-        MarketCap: 31030000000,
-        IPOyear: 2012,
-        Sector: "Energy",
-        Industry: "Natural Gas Distribution",
-        Exchange: "NYSE"
+        symbol: "MA",
+        name: "Mastercard Inc.",
+        sector: "Information Technology"
       },
       {
-        symbol: "MPW",
-        name: "Medical Properties Trust, Inc.",
-        lastsale: 17.5,
-        MarketCap: 7810000000,
-        IPOyear: 2005,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NYSE"
+        symbol: "MAT",
+        name: "Mattel Inc.",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "MSG",
-        name: "The Madison Square Garden Company",
-        lastsale: 290.04,
-        MarketCap: 6890000000,
-        IPOyear: 2015,
-        Sector: "Consumer Services",
-        Industry: "Services-Misc. Amusement & Recreation",
-        Exchange: "NYSE"
+        symbol: "MKC",
+        name: "McCormick & Co.",
+        sector: "Consumer Staples"
+      },
+      {
+        symbol: "MCD",
+        name: "McDonald's Corp.",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "MCK",
+        name: "McKesson Corp.",
+        sector: "Health Care"
+      },
+      {
+        symbol: "MDT",
+        name: "Medtronic plc",
+        sector: "Health Care"
+      },
+      {
+        symbol: "MRK",
+        name: "Merck & Co.",
+        sector: "Health Care"
+      },
+      {
+        symbol: "MET",
+        name: "MetLife Inc.",
+        sector: "Financials"
       },
       {
         symbol: "MTD",
-        name: "Mettler-Toledo International, Inc.",
-        lastsale: 756.75,
-        MarketCap: 18770000000,
-        IPOyear: 1997,
-        Sector: "Capital Goods",
-        Industry: "Biotechnology: Laboratory Analytical Instruments",
-        Exchange: "NYSE"
+        name: "Mettler Toledo",
+        sector: "Health Care"
       },
       {
-        symbol: "MTN",
-        name: "Vail Resorts, Inc.",
-        lastsale: 246.52,
-        MarketCap: 9910000000,
-        IPOyear: 1997,
-        Sector: "Consumer Services",
-        Industry: "Services-Misc. Amusement & Recreation",
-        Exchange: "NYSE"
+        symbol: "MGM",
+        name: "MGM Resorts International",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "NEWR",
-        name: "New Relic, Inc.",
-        lastsale: 93.17,
-        MarketCap: 5440000000,
-        IPOyear: 2014,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NYSE"
+        symbol: "KORS",
+        name: "Michael Kors Holdings",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "MCHP",
+        name: "Microchip Technology",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "MU",
+        name: "Micron Technology",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "MSFT",
+        name: "Microsoft Corp.",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "MAA",
+        name: "Mid-America Apartments",
+        sector: "Real Estate"
+      },
+      {
+        symbol: "MHK",
+        name: "Mohawk Industries",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "TAP",
+        name: "Molson Coors Brewing Company",
+        sector: "Consumer Staples"
+      },
+      {
+        symbol: "MDLZ",
+        name: "Mondelez International",
+        sector: "Consumer Staples"
+      },
+      {
+        symbol: "MON",
+        name: "Monsanto Co.",
+        sector: "Materials"
+      },
+      {
+        symbol: "MNST",
+        name: "Monster Beverage",
+        sector: "Consumer Staples"
+      },
+      {
+        symbol: "MCO",
+        name: "Moody's Corp",
+        sector: "Financials"
+      },
+      {
+        symbol: "MS",
+        name: "Morgan Stanley",
+        sector: "Financials"
+      },
+      {
+        symbol: "MSI",
+        name: "Motorola Solutions Inc.",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "MYL",
+        name: "Mylan N.V.",
+        sector: "Health Care"
+      },
+      {
+        symbol: "NDAQ",
+        name: "Nasdaq, Inc.",
+        sector: "Financials"
+      },
+      {
+        symbol: "NOV",
+        name: "National Oilwell Varco Inc.",
+        sector: "Energy"
+      },
+      {
+        symbol: "NAVI",
+        name: "Navient",
+        sector: "Financials"
+      },
+      {
+        symbol: "NTAP",
+        name: "NetApp",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "NFLX",
+        name: "Netflix Inc.",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "NWL",
+        name: "Newell Brands",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "NFX",
+        name: "Newfield Exploration Co",
+        sector: "Energy"
+      },
+      {
+        symbol: "NEM",
+        name: "Newmont Mining Corporation",
+        sector: "Materials"
+      },
+      {
+        symbol: "NWSA",
+        name: "News Corp. Class A",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "NWS",
+        name: "News Corp. Class B",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "NEE",
+        name: "NextEra Energy",
+        sector: "Utilities"
       },
       {
         symbol: "NLSN",
-        name: "Nielsen N.V.",
-        lastsale: 23.16,
-        MarketCap: 8230000000,
-        IPOyear: 2011,
-        Sector: "Miscellaneous",
-        Industry: "Business Services",
-        Exchange: "NYSE"
+        name: "Nielsen Holdings",
+        sector: "Industrials"
       },
       {
-        symbol: "NOK",
-        name: "Nokia Corporation",
-        lastsale: 5.41,
-        MarketCap: 30290000000,
-        IPOyear: 1994,
-        Sector: "Technology",
-        Industry: "Radio And Television Broadcasting And Communications Equipment",
-        Exchange: "NYSE"
+        symbol: "NKE",
+        name: "Nike",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "NOW",
-        name: "ServiceNow, Inc.",
-        lastsale: 277.39,
-        MarketCap: 51460000000,
-        IPOyear: 2012,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NYSE"
+        symbol: "NI",
+        name: "NiSource Inc.",
+        sector: "Utilities"
       },
       {
-        symbol: "NTR",
-        name: "Nutrien Ltd.",
-        lastsale: 54.81,
-        MarketCap: 31790000000,
-        IPOyear: 2018,
-        Sector: "Basic Industries",
-        Industry: "Agricultural Chemicals",
-        Exchange: "NYSE"
+        symbol: "NBL",
+        name: "Noble Energy Inc",
+        sector: "Energy"
       },
       {
-        symbol: "OAK",
-        name: "Oaktree Capital Group, LLC",
-        lastsale: 50.66,
-        MarketCap: 8230000000,
-        IPOyear: 2012,
-        Sector: "Finance",
-        Industry: "Investment Managers",
-        Exchange: "NYSE"
+        symbol: "JWN",
+        name: "Nordstrom",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "OHI",
-        name: "Omega Healthcare Investors, Inc.",
-        lastsale: 36.3,
-        MarketCap: 7790000000,
-        IPOyear: 1992,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NYSE"
+        symbol: "NSC",
+        name: "Norfolk Southern Corp.",
+        sector: "Industrials"
       },
       {
-        symbol: "OMF",
-        name: "OneMain Holdings, Inc.",
-        lastsale: 41.45,
-        MarketCap: 5640000000,
-        IPOyear: 2013,
-        Sector: "Finance",
-        Industry: "Finance: Consumer Services",
-        Exchange: "NYSE"
+        symbol: "NTRS",
+        name: "Northern Trust Corp.",
+        sector: "Financials"
+      },
+      {
+        symbol: "NOC",
+        name: "Northrop Grumman Corp.",
+        sector: "Industrials"
+      },
+      {
+        symbol: "NCLH",
+        name: "Norwegian Cruise Line",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "NRG",
+        name: "NRG Energy",
+        sector: "Utilities"
+      },
+      {
+        symbol: "NUE",
+        name: "Nucor Corp.",
+        sector: "Materials"
+      },
+      {
+        symbol: "NVDA",
+        name: "Nvidia Corporation",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "ORLY",
+        name: "O'Reilly Automotive",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "OXY",
+        name: "Occidental Petroleum",
+        sector: "Energy"
+      },
+      {
+        symbol: "OMC",
+        name: "Omnicom Group",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "OKE",
+        name: "ONEOK",
+        sector: "Energy"
       },
       {
         symbol: "ORCL",
-        name: "Oracle Corporation",
-        lastsale: 56.3,
-        MarketCap: 187810000000,
-        IPOyear: 1986,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NYSE"
+        name: "Oracle Corp.",
+        sector: "Information Technology"
       },
       {
-        symbol: "PAA",
-        name: "Plains All American Pipeline, L.P.",
-        lastsale: 23.78,
-        MarketCap: 17280000000,
-        IPOyear: 1998,
-        Sector: "Energy",
-        Industry: "Natural Gas Distribution",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "PAC",
-        name: "Grupo Aeroportuario Del Pacifico, S.A. de C.V.",
-        lastsale: 100.09,
-        MarketCap: 5620000000,
-        IPOyear: 2006,
-        Sector: "Transportation",
-        Industry: "Aerospace",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "PAGS",
-        name: "PagSeguro Digital Ltd.",
-        lastsale: 43.48,
-        MarketCap: 14260000000,
-        IPOyear: 2018,
-        Sector: "Technology",
-        Industry: "EDP Services",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "PANW",
-        name: "Palo Alto Networks, Inc.",
-        lastsale: 226.54,
-        MarketCap: 21740000000,
-        IPOyear: 2012,
-        Sector: "Technology",
-        Industry: "Computer peripheral equipment",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "PAYC",
-        name: "Paycom Software, Inc.",
-        lastsale: 240.75,
-        MarketCap: 13740000000,
-        IPOyear: 2014,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "PE",
-        name: "Parsley Energy, Inc.",
-        lastsale: 16.59,
-        MarketCap: 5250000000,
-        IPOyear: 2014,
-        Sector: "Energy",
-        Industry: "Oil & Gas Production",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "PEN",
-        name: "Penumbra, Inc.",
-        lastsale: 167.6,
-        MarketCap: 5820000000,
-        IPOyear: 2015,
-        Sector: "Health Care",
-        Industry: "Medical/Dental Instruments",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "PINS",
-        name: "Pinterest, Inc.",
-        lastsale: 28.99,
-        MarketCap: 15730000000,
-        IPOyear: 2019,
-        Sector: "Technology",
-        Industry: "Computer Software: Programming, Data Processing",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "PK",
-        name: "Park Hotels & Resorts Inc.",
-        lastsale: 26.41,
-        MarketCap: 5320000000,
-        IPOyear: 2016,
-        Sector: "Consumer Services",
-        Industry: "Hotels/Resorts",
-        Exchange: "NYSE"
+        symbol: "PCAR",
+        name: "PACCAR Inc.",
+        sector: "Industrials"
       },
       {
         symbol: "PKG",
         name: "Packaging Corporation of America",
-        lastsale: 100.97,
-        MarketCap: 9540000000,
-        IPOyear: 2000,
-        Sector: "Consumer Durables",
-        Industry: "Containers/Packaging",
-        Exchange: "NYSE"
+        sector: "Materials"
       },
       {
-        symbol: "PKX",
-        name: "POSCO",
-        lastsale: 46.83,
-        MarketCap: 16330000000,
-        IPOyear: 1994,
-        Sector: "Basic Industries",
-        Industry: "Steel/Iron Ore",
-        Exchange: "NYSE"
+        symbol: "PH",
+        name: "Parker-Hannifin",
+        sector: "Industrials"
       },
       {
-        symbol: "PLAN",
-        name: "Anaplan, Inc.",
-        lastsale: 56.94,
-        MarketCap: 7350000000,
-        IPOyear: 2018,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NYSE"
+        symbol: "PDCO",
+        name: "Patterson Companies",
+        sector: "Health Care"
       },
       {
-        symbol: "PLNT",
-        name: "Planet Fitness, Inc.",
-        lastsale: 78.66,
-        MarketCap: 7320000000,
-        IPOyear: 2015,
-        Sector: "Consumer Services",
-        Industry: "Hotels/Resorts",
-        Exchange: "NYSE"
+        symbol: "PAYX",
+        name: "Paychex Inc.",
+        sector: "Information Technology"
       },
       {
-        symbol: "POST",
-        name: "Post Holdings, Inc.",
-        lastsale: 107.22,
-        MarketCap: 7860000000,
-        IPOyear: 2012,
-        Sector: "Consumer Non-Durables",
-        Industry: "Packaged Foods",
-        Exchange: "NYSE"
+        symbol: "PYPL",
+        name: "PayPal",
+        sector: "Information Technology"
       },
       {
-        symbol: "PRI",
-        name: "Primerica, Inc.",
-        lastsale: 122.69,
-        MarketCap: 5190000000,
-        IPOyear: 2010,
-        Sector: "Finance",
-        Industry: "Life Insurance",
-        Exchange: "NYSE"
+        symbol: "PNR",
+        name: "Pentair Ltd.",
+        sector: "Industrials"
       },
       {
-        symbol: "PRU",
-        name: "Prudential Financial, Inc.",
-        lastsale: 101.31,
-        MarketCap: 41270000000,
-        IPOyear: 2001,
-        Sector: "Finance",
-        Industry: "Life Insurance",
-        Exchange: "NYSE"
+        symbol: "PBCT",
+        name: "People's United Financial",
+        sector: "Financials"
       },
       {
-        symbol: "PSXP",
-        name: "Phillips 66 Partners LP",
-        lastsale: 52.26,
-        MarketCap: 6530000000,
-        IPOyear: 2013,
-        Sector: "Energy",
-        Industry: "Natural Gas Distribution",
-        Exchange: "NYSE"
+        symbol: "PEP",
+        name: "PepsiCo Inc.",
+        sector: "Consumer Staples"
       },
       {
-        symbol: "QSR",
-        name: "Restaurant Brands International Inc.",
-        lastsale: 73.7,
-        MarketCap: 18880000000,
-        IPOyear: 2014,
-        Sector: "Consumer Services",
-        Industry: "Restaurants",
-        Exchange: "NYSE"
+        symbol: "PKI",
+        name: "PerkinElmer",
+        sector: "Health Care"
       },
       {
-        symbol: "RACE",
-        name: "Ferrari N.V.",
-        lastsale: 161.08,
-        MarketCap: 39330000000,
-        IPOyear: 2015,
-        Sector: "Capital Goods",
-        Industry: "Auto Manufacturing",
-        Exchange: "NYSE"
+        symbol: "PRGO",
+        name: "Perrigo",
+        sector: "Health Care"
       },
       {
-        symbol: "RCL",
-        name: "Royal Caribbean Cruises Ltd.",
-        lastsale: 116.34,
-        MarketCap: 24380000000,
-        IPOyear: 1993,
-        Sector: "Consumer Services",
-        Industry: "Marine Transportation",
-        Exchange: "NYSE"
+        symbol: "PFE",
+        name: "Pfizer Inc.",
+        sector: "Health Care"
       },
       {
-        symbol: "RELX",
-        name: "RELX PLC",
-        lastsale: 23.73,
-        MarketCap: 46170000000,
-        IPOyear: 2015,
-        Sector: "Consumer Services",
-        Industry: "Publishing",
-        Exchange: "NYSE"
+        symbol: "PCG",
+        name: "PG&E Corp.",
+        sector: "Utilities"
       },
       {
-        symbol: "RIO",
-        name: "Rio Tinto Plc",
-        lastsale: 57.08,
-        MarketCap: 96560000000,
-        IPOyear: 2002,
-        Sector: "Basic Industries",
-        Industry: "Precious Metals",
-        Exchange: "NYSE"
+        symbol: "PM",
+        name: "Philip Morris International",
+        sector: "Consumer Staples"
+      },
+      {
+        symbol: "PSX",
+        name: "Phillips 66",
+        sector: "Energy"
+      },
+      {
+        symbol: "PNW",
+        name: "Pinnacle West Capital",
+        sector: "Utilities"
+      },
+      {
+        symbol: "PXD",
+        name: "Pioneer Natural Resources",
+        sector: "Energy"
+      },
+      {
+        symbol: "PNC",
+        name: "PNC Financial Services",
+        sector: "Financials"
       },
       {
         symbol: "RL",
-        name: "Ralph Lauren Corporation",
-        lastsale: 104.23,
-        MarketCap: 8050000000,
-        IPOyear: 1997,
-        Sector: "Consumer Non-Durables",
-        Industry: "Apparel",
-        Exchange: "NYSE"
+        name: "Polo Ralph Lauren Corp.",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "RNG",
-        name: "Ringcentral, Inc.",
-        lastsale: 141.98,
-        MarketCap: 11630000000,
-        IPOyear: 2013,
-        Sector: "Technology",
-        Industry: "EDP Services",
-        Exchange: "NYSE"
+        symbol: "PPG",
+        name: "PPG Industries",
+        sector: "Materials"
       },
       {
-        symbol: "ROP",
-        name: "Roper Technologies, Inc.",
-        lastsale: 363.65,
-        MarketCap: 37760000000,
-        IPOyear: 1992,
-        Sector: "Capital Goods",
-        Industry: "Industrial Machinery/Components",
-        Exchange: "NYSE"
+        symbol: "PPL",
+        name: "PPL Corp.",
+        sector: "Utilities"
       },
       {
-        symbol: "RS",
-        name: "Reliance Steel & Aluminum Co.",
-        lastsale: 99.95,
-        MarketCap: 6660000000,
-        IPOyear: 1994,
-        Sector: "Basic Industries",
-        Industry: "Metal Fabrications",
-        Exchange: "NYSE"
+        symbol: "PX",
+        name: "Praxair Inc.",
+        sector: "Materials"
+      },
+      {
+        symbol: "PCLN",
+        name: "Priceline.com Inc",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "PFG",
+        name: "Principal Financial Group",
+        sector: "Financials"
+      },
+      {
+        symbol: "PG",
+        name: "Procter & Gamble",
+        sector: "Consumer Staples"
+      },
+      {
+        symbol: "PGR",
+        name: "Progressive Corp.",
+        sector: "Financials"
+      },
+      {
+        symbol: "PLD",
+        name: "Prologis",
+        sector: "Real Estate"
+      },
+      {
+        symbol: "PRU",
+        name: "Prudential Financial",
+        sector: "Financials"
+      },
+      {
+        symbol: "PEG",
+        name: "Public Serv. Enterprise Inc.",
+        sector: "Utilities"
+      },
+      {
+        symbol: "PSA",
+        name: "Public Storage",
+        sector: "Real Estate"
+      },
+      {
+        symbol: "PHM",
+        name: "Pulte Homes Inc.",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "PVH",
+        name: "PVH Corp.",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "QRVO",
+        name: "Qorvo",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "QCOM",
+        name: "QUALCOMM Inc.",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "PWR",
+        name: "Quanta Services Inc.",
+        sector: "Industrials"
+      },
+      {
+        symbol: "DGX",
+        name: "Quest Diagnostics",
+        sector: "Health Care"
+      },
+      {
+        symbol: "RRC",
+        name: "Range Resources Corp.",
+        sector: "Energy"
+      },
+      {
+        symbol: "RJF",
+        name: "Raymond James Financial Inc.",
+        sector: "Financials"
+      },
+      {
+        symbol: "RTN",
+        name: "Raytheon Co.",
+        sector: "Industrials"
+      },
+      {
+        symbol: "O",
+        name: "Realty Income Corporation",
+        sector: "Real Estate"
+      },
+      {
+        symbol: "RHT",
+        name: "Red Hat Inc.",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "REG",
+        name: "Regency Centers Corporation",
+        sector: "Real Estate"
+      },
+      {
+        symbol: "REGN",
+        name: "Regeneron",
+        sector: "Health Care"
+      },
+      {
+        symbol: "RF",
+        name: "Regions Financial Corp.",
+        sector: "Financials"
       },
       {
         symbol: "RSG",
-        name: "Republic Services, Inc.",
-        lastsale: 88.65,
-        MarketCap: 28430000000,
-        IPOyear: 1998,
-        Sector: "Public Utilities",
-        Industry: "Environmental Services",
-        Exchange: "NYSE"
+        name: "Republic Services Inc",
+        sector: "Industrials"
       },
       {
-        symbol: "S",
-        name: "Sprint Corporation",
-        lastsale: 7.33,
-        MarketCap: 30000000000,
-        IPOyear: 2013,
-        Sector: "Public Utilities",
-        Industry: "Telecommunications Equipment",
-        Exchange: "NYSE"
+        symbol: "RMD",
+        name: "ResMed",
+        sector: "Health Care"
       },
       {
-        symbol: "SBS",
-        name: "Companhia de saneamento Basico Do Estado De Sao Paulo - Sabesp",
-        lastsale: 13.91,
-        MarketCap: 9510000000,
-        IPOyear: 2002,
-        Sector: "Public Utilities",
-        Industry: "Water Supply",
-        Exchange: "NYSE"
+        symbol: "RHI",
+        name: "Robert Half International",
+        sector: "Industrials"
       },
       {
-        symbol: "SC",
-        name: "Santander Consumer USA Holdings Inc.",
-        lastsale: 26.91,
-        MarketCap: 9470000000,
-        IPOyear: 2014,
-        Sector: "Finance",
-        Industry: "Finance: Consumer Services",
-        Exchange: "NYSE"
+        symbol: "ROK",
+        name: "Rockwell Automation Inc.",
+        sector: "Industrials"
       },
       {
-        symbol: "SE",
-        name: "Sea Limited",
-        lastsale: 35.1,
-        MarketCap: 14520000000,
-        IPOyear: 2017,
-        Sector: "Consumer Services",
-        Industry: "Other Consumer Services",
-        Exchange: "NYSE"
+        symbol: "COL",
+        name: "Rockwell Collins",
+        sector: "Industrials"
       },
       {
-        symbol: "SERV",
-        name: "ServiceMaster Global Holdings, Inc.",
-        lastsale: 53.23,
-        MarketCap: 7240000000,
-        IPOyear: 2014,
-        Sector: "Consumer Services",
-        Industry: "Other Consumer Services",
-        Exchange: "NYSE"
+        symbol: "ROP",
+        name: "Roper Technologies",
+        sector: "Industrials"
       },
       {
-        symbol: "SHLX",
-        name: "Shell Midstream Partners, L.P.",
-        lastsale: 21.59,
-        MarketCap: 5040000000,
-        IPOyear: 2014,
-        Sector: "Energy",
-        Industry: "Natural Gas Distribution",
-        Exchange: "NYSE"
+        symbol: "ROST",
+        name: "Ross Stores",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "SHOP",
-        name: "Shopify Inc.",
-        lastsale: 317.88,
-        MarketCap: 31880000000,
-        IPOyear: 2015,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NYSE"
+        symbol: "RCL",
+        name: "Royal Caribbean Cruises Ltd",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "SKX",
-        name: "Skechers U.S.A., Inc.",
-        lastsale: 37.94,
-        MarketCap: 5970000000,
-        IPOyear: 1999,
-        Sector: "Consumer Non-Durables",
-        Industry: "Shoe Manufacturing",
-        Exchange: "NYSE"
+        symbol: "SPGI",
+        name: "S&P Global, Inc.",
+        sector: "Financials"
+      },
+      {
+        symbol: "CRM",
+        name: "Salesforce.com",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "SBAC",
+        name: "SBA Communications",
+        sector: "Real Estate"
+      },
+      {
+        symbol: "SCG",
+        name: "SCANA Corp",
+        sector: "Utilities"
+      },
+      {
+        symbol: "SLB",
+        name: "Schlumberger Ltd.",
+        sector: "Energy"
+      },
+      {
+        symbol: "SNI",
+        name: "Scripps Networks Interactive Inc.",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "STX",
+        name: "Seagate Technology",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "SEE",
+        name: "Sealed Air",
+        sector: "Materials"
+      },
+      {
+        symbol: "SRE",
+        name: "Sempra Energy",
+        sector: "Utilities"
+      },
+      {
+        symbol: "SHW",
+        name: "Sherwin-Williams",
+        sector: "Materials"
+      },
+      {
+        symbol: "SIG",
+        name: "Signet Jewelers",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "SPG",
+        name: "Simon Property Group Inc",
+        sector: "Real Estate"
+      },
+      {
+        symbol: "SWKS",
+        name: "Skyworks Solutions",
+        sector: "Information Technology"
       },
       {
         symbol: "SLG",
-        name: "SL Green Realty Corp",
-        lastsale: 81.08,
-        MarketCap: 6680000000,
-        IPOyear: 1997,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NYSE"
+        name: "SL Green Realty",
+        sector: "Real Estate"
       },
       {
-        symbol: "SMAR",
-        name: "Smartsheet Inc.",
-        lastsale: 49.91,
-        MarketCap: 5320000000,
-        IPOyear: 2018,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NYSE"
+        symbol: "SNA",
+        name: "Snap-On Inc.",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "SMG",
-        name: "Scotts Miracle-Gro Company (The)",
-        lastsale: 112.18,
-        MarketCap: 6220000000,
-        IPOyear: 1992,
-        Sector: "Basic Industries",
-        Industry: "Agricultural Chemicals",
-        Exchange: "NYSE"
+        symbol: "SO",
+        name: "Southern Co.",
+        sector: "Utilities"
       },
       {
-        symbol: "SNAP",
-        name: "Snap Inc.",
-        lastsale: 16.8,
-        MarketCap: 23170000000,
-        IPOyear: 2017,
-        Sector: "Technology",
-        Industry: "Computer Software: Programming, Data Processing",
-        Exchange: "NYSE"
+        symbol: "LUV",
+        name: "Southwest Airlines",
+        sector: "Industrials"
       },
       {
-        symbol: "SNX",
-        name: "Synnex Corporation",
-        lastsale: 98.54,
-        MarketCap: 5030000000,
-        IPOyear: 2003,
-        Sector: "Technology",
-        Industry: "Retail: Computer Software & Peripheral Equipment",
-        Exchange: "NYSE"
+        symbol: "SWK",
+        name: "Stanley Black & Decker",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "SPOT",
-        name: "Spotify Technology S.A.",
-        lastsale: 154.94,
-        MarketCap: 28020000000,
-        IPOyear: 2018,
-        Sector: "Consumer Services",
-        Industry: "Broadcasting",
-        Exchange: "NYSE"
+        symbol: "SBUX",
+        name: "Starbucks Corp.",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "SPR",
-        name: "Spirit Aerosystems Holdings, Inc.",
-        lastsale: 76.84,
-        MarketCap: 7950000000,
-        IPOyear: 2006,
-        Sector: "Capital Goods",
-        Industry: "Military/Government/Technical",
-        Exchange: "NYSE"
+        symbol: "STT",
+        name: "State Street Corp.",
+        sector: "Financials"
       },
       {
-        symbol: "SQ",
-        name: "Square, Inc.",
-        lastsale: 80.41,
-        MarketCap: 34010000000,
-        IPOyear: 2015,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NYSE"
+        symbol: "SRCL",
+        name: "Stericycle Inc",
+        sector: "Industrials"
       },
       {
-        symbol: "SQM",
-        name: "Sociedad Quimica y Minera S.A.",
-        lastsale: 29.49,
-        MarketCap: 7760000000,
-        IPOyear: 1993,
-        Sector: "Basic Industries",
-        Industry: "Mining & Quarrying of Nonmetallic Minerals (No Fuels)",
-        Exchange: "NYSE"
+        symbol: "SYK",
+        name: "Stryker Corp.",
+        sector: "Health Care"
       },
       {
-        symbol: "ST",
-        name: "Sensata Technologies Holding plc",
-        lastsale: 47.43,
-        MarketCap: 7640000000,
-        IPOyear: 2010,
-        Sector: "Capital Goods",
-        Industry: "Industrial Machinery/Components",
-        Exchange: "NYSE"
+        symbol: "STI",
+        name: "SunTrust Banks",
+        sector: "Financials"
       },
       {
-        symbol: "STOR",
-        name: "STORE Capital Corporation",
-        lastsale: 34.21,
-        MarketCap: 7770000000,
-        IPOyear: 2014,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "STWD",
-        name: "STARWOOD PROPERTY TRUST, INC.",
-        lastsale: 23.23,
-        MarketCap: 6510000000,
-        IPOyear: 2009,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "SUI",
-        name: "Sun Communities, Inc.",
-        lastsale: 132.81,
-        MarketCap: 12040000000,
-        IPOyear: 1993,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "SUZ",
-        name: "Suzano S.A.",
-        lastsale: 15.94,
-        MarketCap: 10750000000,
-        IPOyear: 2018,
-        Sector: "Basic Industries",
-        Industry: "Paper",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "SWI",
-        name: "SolarWinds Corporation",
-        lastsale: 17.92,
-        MarketCap: 5560000000,
-        IPOyear: 2018,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NYSE"
+        symbol: "SYMC",
+        name: "Symantec Corp.",
+        sector: "Information Technology"
       },
       {
         symbol: "SYF",
         name: "Synchrony Financial",
-        lastsale: 35.88,
-        MarketCap: 23800000000,
-        IPOyear: 2014,
-        Sector: "Finance",
-        Industry: "Finance: Consumer Services",
-        Exchange: "NYSE"
+        sector: "Financials"
       },
       {
-        symbol: "TAK",
-        name: "Takeda Pharmaceutical Company Limited",
-        lastsale: 17.6,
-        MarketCap: 54730000000,
-        IPOyear: 2018,
-        Sector: "Health Care",
-        Industry: "Major Pharmaceuticals",
-        Exchange: "NYSE"
+        symbol: "SNPS",
+        name: "Synopsys Inc.",
+        sector: "Information Technology"
       },
       {
-        symbol: "TDG",
-        name: "Transdigm Group Incorporated",
-        lastsale: 485.44,
-        MarketCap: 25820000000,
-        IPOyear: 2006,
-        Sector: "Capital Goods",
-        Industry: "Military/Government/Technical",
-        Exchange: "NYSE"
+        symbol: "SYY",
+        name: "Sysco Corp.",
+        sector: "Consumer Staples"
       },
       {
-        symbol: "TEF",
-        name: "Telefonica SA",
-        lastsale: 7.61,
-        MarketCap: 39510000000,
-        IPOyear: 1988,
-        Sector: "Public Utilities",
-        Industry: "Telecommunications Equipment",
-        Exchange: "NYSE"
+        symbol: "TROW",
+        name: "T. Rowe Price Group",
+        sector: "Financials"
       },
       {
-        symbol: "TGE",
-        name: "Tallgrass Energy, LP",
-        lastsale: 19.17,
-        MarketCap: 5390000000,
-        IPOyear: 2015,
-        Sector: "Public Utilities",
-        Industry: "Natural Gas Distribution",
-        Exchange: "NYSE"
+        symbol: "TPR",
+        name: "Tapestry, Inc.",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "TGT",
+        name: "Target Corp.",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "TEL",
+        name: "TE Connectivity Ltd.",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "FTI",
+        name: "TechnipFMC",
+        sector: "Energy"
+      },
+      {
+        symbol: "TXN",
+        name: "Texas Instruments",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "TXT",
+        name: "Textron Inc.",
+        sector: "Industrials"
+      },
+      {
+        symbol: "BK",
+        name: "The Bank of New York Mellon Corp.",
+        sector: "Financials"
+      },
+      {
+        symbol: "CLX",
+        name: "The Clorox Company",
+        sector: "Consumer Staples"
+      },
+      {
+        symbol: "COO",
+        name: "The Cooper Companies",
+        sector: "Health Care"
+      },
+      {
+        symbol: "HSY",
+        name: "The Hershey Company",
+        sector: "Consumer Staples"
+      },
+      {
+        symbol: "MOS",
+        name: "The Mosaic Company",
+        sector: "Materials"
+      },
+      {
+        symbol: "TRV",
+        name: "The Travelers Companies Inc.",
+        sector: "Financials"
+      },
+      {
+        symbol: "DIS",
+        name: "The Walt Disney Company",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "TMO",
+        name: "Thermo Fisher Scientific",
+        sector: "Health Care"
       },
       {
         symbol: "TIF",
         name: "Tiffany & Co.",
-        lastsale: 93.92,
-        MarketCap: 11400000000,
-        IPOyear: 1987,
-        Sector: "Consumer Services",
-        Industry: "Consumer Specialties",
-        Exchange: "NYSE"
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "TME",
-        name: "Tencent Music Entertainment Group",
-        lastsale: 14.27,
-        MarketCap: 23300000000,
-        IPOyear: 2018,
-        Sector: "Consumer Services",
-        Industry: "Broadcasting",
-        Exchange: "NYSE"
+        symbol: "TWX",
+        name: "Time Warner Inc.",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "TNET",
-        name: "TriNet Group, Inc.",
-        lastsale: 73.54,
-        MarketCap: 5140000000,
-        IPOyear: 2014,
-        Sector: "Miscellaneous",
-        Industry: "Business Services",
-        Exchange: "NYSE"
+        symbol: "TJX",
+        name: "TJX Companies Inc.",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "TRGP",
-        name: "Targa Resources, Inc.",
-        lastsale: 38.91,
-        MarketCap: 9060000000,
-        IPOyear: 2010,
-        Sector: "Public Utilities",
-        Industry: "Natural Gas Distribution",
-        Exchange: "NYSE"
+        symbol: "TMK",
+        name: "Torchmark Corp.",
+        sector: "Financials"
       },
       {
-        symbol: "TRU",
-        name: "TransUnion",
-        lastsale: 82.79,
-        MarketCap: 15550000000,
-        IPOyear: 2015,
-        Sector: "Finance",
-        Industry: "Finance: Consumer Services",
-        Exchange: "NYSE"
+        symbol: "TSS",
+        name: "Total System Services",
+        sector: "Information Technology"
       },
       {
-        symbol: "TSM",
-        name: "Taiwan Semiconductor Manufacturing Company Ltd.",
-        lastsale: 42.63,
-        MarketCap: 221080000000,
-        IPOyear: 1997,
-        Sector: "Technology",
-        Industry: "Semiconductors",
-        Exchange: "NYSE"
+        symbol: "TSCO",
+        name: "Tractor Supply Company",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "TV",
-        name: "Grupo Televisa S.A.",
-        lastsale: 9.51,
-        MarketCap: 5500000000,
-        IPOyear: 1993,
-        Sector: "Consumer Services",
-        Industry: "Broadcasting",
-        Exchange: "NYSE"
+        symbol: "TDG",
+        name: "TransDigm Group",
+        sector: "Industrials"
       },
       {
-        symbol: "TWLO",
-        name: "Twilio Inc.",
-        lastsale: 139.11,
-        MarketCap: 17560000000,
-        IPOyear: 2016,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NYSE"
+        symbol: "TRIP",
+        name: "TripAdvisor",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "TWTR",
-        name: "Twitter, Inc.",
-        lastsale: 42.31,
-        MarketCap: 32520000000,
-        IPOyear: 2013,
-        Sector: "Technology",
-        Industry: "Computer Software: Programming, Data Processing",
-        Exchange: "NYSE"
+        symbol: "FOXA",
+        name: "Twenty-First Century Fox Class A",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "FOX",
+        name: "Twenty-First Century Fox Class B",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "TSN",
+        name: "Tyson Foods",
+        sector: "Consumer Staples"
+      },
+      {
+        symbol: "USB",
+        name: "U.S. Bancorp",
+        sector: "Financials"
+      },
+      {
+        symbol: "UDR",
+        name: "UDR Inc",
+        sector: "Real Estate"
+      },
+      {
+        symbol: "ULTA",
+        name: "Ulta Salon Cosmetics & Fragrance Inc",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "UAA",
+        name: "Under Armour Class A",
+        sector: "Consumer Discretionary"
       },
       {
         symbol: "UA",
-        name: "Under Armour, Inc.",
-        lastsale: 20.34,
-        MarketCap: 9170000000,
-        IPOyear: 2016,
-        Sector: "Consumer Non-Durables",
-        Industry: "Apparel",
-        Exchange: "NYSE"
+        name: "Under Armour Class C",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "UBER",
-        name: "Uber Technologies, Inc.",
-        lastsale: 42.14,
-        MarketCap: 71450000000,
-        IPOyear: 2019,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NYSE"
+        symbol: "UNP",
+        name: "Union Pacific",
+        sector: "Industrials"
       },
       {
-        symbol: "UBS",
-        name: "UBS AG",
-        lastsale: 11.17,
-        MarketCap: 40880000000,
-        IPOyear: 2014,
-        Sector: "Finance",
-        Industry: "Major Banks",
-        Exchange: "NYSE"
+        symbol: "UAL",
+        name: "United Continental Holdings",
+        sector: "Industrials"
+      },
+      {
+        symbol: "UNH",
+        name: "United Health Group Inc.",
+        sector: "Health Care"
       },
       {
         symbol: "UPS",
-        name: "United Parcel Service, Inc.",
-        lastsale: 119.47,
-        MarketCap: 102830000000,
-        IPOyear: 1999,
-        Sector: "Transportation",
-        Industry: "Trucking Freight/Courier Services",
-        Exchange: "NYSE"
+        name: "United Parcel Service",
+        sector: "Industrials"
       },
       {
         symbol: "URI",
         name: "United Rentals, Inc.",
-        lastsale: 126.55,
-        MarketCap: 9760000000,
-        IPOyear: 1997,
-        Sector: "Technology",
-        Industry: "Diversified Commercial Services",
-        Exchange: "NYSE"
+        sector: "Industrials"
       },
       {
-        symbol: "USFD",
-        name: "US Foods Holding Corp.",
-        lastsale: 35.37,
-        MarketCap: 7730000000,
-        IPOyear: 2016,
-        Sector: "Consumer Non-Durables",
-        Industry: "Food Distributors",
-        Exchange: "NYSE"
+        symbol: "UTX",
+        name: "United Technologies",
+        sector: "Industrials"
       },
       {
-        symbol: "VEDL",
-        name: "Vedanta  Limited",
-        lastsale: 8.73,
-        MarketCap: 8110000000,
-        IPOyear: 2013,
-        Sector: "Capital Goods",
-        Industry: "Metal Fabrications",
-        Exchange: "NYSE"
+        symbol: "UHS",
+        name: "Universal Health Services, Inc.",
+        sector: "Health Care"
       },
       {
-        symbol: "VEEV",
-        name: "Veeva Systems Inc.",
-        lastsale: 165.9,
-        MarketCap: 24430000000,
-        IPOyear: 2013,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NYSE"
+        symbol: "UNM",
+        name: "Unum Group",
+        sector: "Financials"
       },
       {
-        symbol: "VICI",
-        name: "VICI Properties Inc.",
-        lastsale: 21.34,
-        MarketCap: 9840000000,
-        IPOyear: 2018,
-        Sector: "Consumer Services",
-        Industry: "Real Estate Investment Trusts",
-        Exchange: "NYSE"
+        symbol: "VFC",
+        name: "V.F. Corp.",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "VIPS",
-        name: "Vipshop Holdings Limited",
-        lastsale: 7.6,
-        MarketCap: 5060000000,
-        IPOyear: 2012,
-        Sector: "Consumer Services",
-        Industry: "Catalog/Specialty Distribution",
-        Exchange: "NYSE"
+        symbol: "VLO",
+        name: "Valero Energy",
+        sector: "Energy"
       },
       {
-        symbol: "VMW",
-        name: "Vmware, Inc.",
-        lastsale: 174.49,
-        MarketCap: 71400000000,
-        IPOyear: 2007,
-        Sector: "Technology",
-        Industry: "Computer Software: Prepackaged Software",
-        Exchange: "NYSE"
+        symbol: "VAR",
+        name: "Varian Medical Systems",
+        sector: "Health Care"
       },
       {
-        symbol: "VOYA",
-        name: "Voya Financial, Inc.",
-        lastsale: 56.17,
-        MarketCap: 8050000000,
-        IPOyear: 2013,
-        Sector: "Finance",
-        Industry: "Life Insurance",
-        Exchange: "NYSE"
+        symbol: "VTR",
+        name: "Ventas Inc",
+        sector: "Real Estate"
       },
       {
-        symbol: "VSM",
-        name: "Versum Materials, Inc.",
-        lastsale: 51.98,
-        MarketCap: 5680000000,
-        IPOyear: 2016,
-        Sector: "Basic Industries",
-        Industry: "Major Chemicals",
-        Exchange: "NYSE"
+        symbol: "VRSN",
+        name: "Verisign Inc.",
+        sector: "Information Technology"
       },
       {
-        symbol: "W",
-        name: "Wayfair Inc.",
-        lastsale: 131.16,
-        MarketCap: 12020000000,
-        IPOyear: 2014,
-        Sector: "Consumer Services",
-        Industry: "Catalog/Specialty Distribution",
-        Exchange: "NYSE"
+        symbol: "VRSK",
+        name: "Verisk Analytics",
+        sector: "Industrials"
       },
       {
-        symbol: "WAL",
-        name: "Western Alliance Bancorporation",
-        lastsale: 49.44,
-        MarketCap: 5120000000,
-        IPOyear: 2005,
-        Sector: "Finance",
-        Industry: "Major Banks",
-        Exchange: "NYSE"
+        symbol: "VZ",
+        name: "Verizon Communications",
+        sector: "Telecommunication Services"
+      },
+      {
+        symbol: "VRTX",
+        name: "Vertex Pharmaceuticals Inc",
+        sector: "Health Care"
+      },
+      {
+        symbol: "VIAB",
+        name: "Viacom Inc.",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "V",
+        name: "Visa Inc.",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "VNO",
+        name: "Vornado Realty Trust",
+        sector: "Real Estate"
+      },
+      {
+        symbol: "VMC",
+        name: "Vulcan Materials",
+        sector: "Materials"
+      },
+      {
+        symbol: "WMT",
+        name: "Wal-Mart Stores",
+        sector: "Consumer Staples"
+      },
+      {
+        symbol: "WBA",
+        name: "Walgreens Boots Alliance",
+        sector: "Consumer Staples"
+      },
+      {
+        symbol: "WM",
+        name: "Waste Management Inc.",
+        sector: "Industrials"
       },
       {
         symbol: "WAT",
         name: "Waters Corporation",
-        lastsale: 210.56,
-        MarketCap: 14630000000,
-        IPOyear: 1995,
-        Sector: "Capital Goods",
-        Industry: "Biotechnology: Laboratory Analytical Instruments",
-        Exchange: "NYSE"
+        sector: "Health Care"
       },
       {
-        symbol: "WCG",
-        name: "WellCare Health Plans, Inc.",
-        lastsale: 287.25,
-        MarketCap: 14450000000,
-        IPOyear: 2004,
-        Sector: "Health Care",
-        Industry: "Medical Specialities",
-        Exchange: "NYSE"
+        symbol: "WEC",
+        name: "Wec Energy Group Inc",
+        sector: "Utilities"
       },
       {
-        symbol: "WES",
-        name: "Western Midstream Partners, LP",
-        lastsale: 27,
-        MarketCap: 12230000000,
-        IPOyear: 2012,
-        Sector: "Public Utilities",
-        Industry: "Natural Gas Distribution",
-        Exchange: "NYSE"
+        symbol: "WFC",
+        name: "Wells Fargo",
+        sector: "Financials"
       },
       {
-        symbol: "WH",
-        name: "Wyndham Hotels & Resorts, Inc.",
-        lastsale: 56.55,
-        MarketCap: 5450000000,
-        IPOyear: 2018,
-        Sector: "Consumer Services",
-        Industry: "Hotels/Resorts",
-        Exchange: "NYSE"
+        symbol: "HCN",
+        name: "Welltower Inc.",
+        sector: "Real Estate"
       },
       {
-        symbol: "WLK",
-        name: "Westlake Chemical Corporation",
-        lastsale: 67.57,
-        MarketCap: 8690000000,
-        IPOyear: 2004,
-        Sector: "Basic Industries",
-        Industry: "Major Chemicals",
-        Exchange: "NYSE"
+        symbol: "WDC",
+        name: "Western Digital",
+        sector: "Information Technology"
       },
       {
-        symbol: "WORK",
-        name: "Slack Technologies, Inc.",
-        lastsale: 33.42,
-        MarketCap: 16860000000,
-        IPOyear: 2019,
-        Sector: "Consumer Services",
-        Industry: "Other Consumer Services",
-        Exchange: "NYSE"
+        symbol: "WU",
+        name: "Western Union Co",
+        sector: "Information Technology"
       },
       {
         symbol: "WRK",
-        name: "Westrock Company",
-        lastsale: 36.05,
-        MarketCap: 9270000000,
-        IPOyear: 2015,
-        Sector: "Consumer Durables",
-        Industry: "Containers/Packaging",
-        Exchange: "NYSE"
+        name: "WestRock Company",
+        sector: "Materials"
       },
       {
-        symbol: "WUBA",
-        name: "58.com Inc.",
-        lastsale: 56.38,
-        MarketCap: 8380000000,
-        IPOyear: 2013,
-        Sector: "Technology",
-        Industry: "Computer Software: Programming, Data Processing",
-        Exchange: "NYSE"
+        symbol: "WY",
+        name: "Weyerhaeuser Corp.",
+        sector: "Real Estate"
+      },
+      {
+        symbol: "WHR",
+        name: "Whirlpool Corp.",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "WMB",
+        name: "Williams Cos.",
+        sector: "Energy"
+      },
+      {
+        symbol: "WLTW",
+        name: "Willis Towers Watson",
+        sector: "Financials"
+      },
+      {
+        symbol: "WYN",
+        name: "Wyndham Worldwide",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "WYNN",
+        name: "Wynn Resorts Ltd",
+        sector: "Consumer Discretionary"
+      },
+      {
+        symbol: "XEL",
+        name: "Xcel Energy Inc",
+        sector: "Utilities"
+      },
+      {
+        symbol: "XRX",
+        name: "Xerox Corp.",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "XLNX",
+        name: "Xilinx Inc",
+        sector: "Information Technology"
+      },
+      {
+        symbol: "XL",
+        name: "XL Capital",
+        sector: "Financials"
       },
       {
         symbol: "XYL",
         name: "Xylem Inc.",
-        lastsale: 80.29,
-        MarketCap: 14450000000,
-        IPOyear: 2011,
-        Sector: "Capital Goods",
-        Industry: "Fluid Controls",
-        Exchange: "NYSE"
+        sector: "Industrials"
       },
       {
-        symbol: "YPF",
-        name: "YPF Sociedad Anonima",
-        lastsale: 16.45,
-        MarketCap: 6470000000,
-        IPOyear: 1993,
-        Sector: "Energy",
-        Industry: "Integrated oil Companies",
-        Exchange: "NYSE"
+        symbol: "YUM",
+        name: "Yum! Brands Inc",
+        sector: "Consumer Discretionary"
       },
       {
-        symbol: "YUMC",
-        name: "Yum China Holdings, Inc.",
-        lastsale: 45.5,
-        MarketCap: 17210000000,
-        IPOyear: 2016,
-        Sector: "Consumer Services",
-        Industry: "Restaurants",
-        Exchange: "NYSE"
+        symbol: "ZBH",
+        name: "Zimmer Biomet Holdings",
+        sector: "Health Care"
       },
       {
-        symbol: "ZAYO",
-        name: "Zayo Group Holdings, Inc.",
-        lastsale: 33.73,
-        MarketCap: 7950000000,
-        IPOyear: 2014,
-        Sector: "Public Utilities",
-        Industry: "Telecommunications Equipment",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "ZEN",
-        name: "Zendesk, Inc.",
-        lastsale: 83.56,
-        MarketCap: 9160000000,
-        IPOyear: 2014,
-        Sector: "Technology",
-        Industry: "EDP Services",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "ZNH",
-        name: "China Southern Airlines Company Limited",
-        lastsale: 32.38,
-        MarketCap: 7940000000,
-        IPOyear: 1997,
-        Sector: "Transportation",
-        Industry: "Air Freight/Delivery Services",
-        Exchange: "NYSE"
-      },
-      {
-        symbol: "ZTO",
-        name: "ZTO Express (Cayman) Inc.",
-        lastsale: 19.65,
-        MarketCap: 15480000000,
-        IPOyear: 2016,
-        Sector: "Transportation",
-        Industry: "Trucking Freight/Courier Services",
-        Exchange: "NYSE"
+        symbol: "ZION",
+        name: "Zions Bancorp",
+        sector: "Financials"
       },
       {
         symbol: "ZTS",
-        name: "Zoetis Inc.",
-        lastsale: 114.89,
-        MarketCap: 54990000000,
-        IPOyear: 2013,
-        Sector: "Health Care",
-        Industry: "Major Pharmaceuticals",
-        Exchange: "NYSE"
+        name: "Zoetis",
+        sector: "Health Care"
+      },
+      {
+        symbol: "-9999",
+        name: "ALL",
+        sector: "ALL"
       }
+    
     ];
+
+  //https://pkgstore.datahub.io/core/s-and-p-500-companies-financials/constituents-financials_json/data/ddf1c04b0ad45e44f976c1f32774ed9a/constituents-financials_json.json
 
   constructor(marketService: GetmarketserviceService) {
     this.marketService = marketService;
   }
+
+  quoteControl = new FormControl('', Validators.required);
+  selectFormControl = new FormControl('', Validators.required);
+  quotes: quote[] = [
+    { name: 'Intraday', description: 'Intraday price quotes (1, 5, 15, 30, 60 min) intervals', apiname: 'TIME_SERIES_INTRADAY' },
+    { name: 'Daily', description: 'Daily price quotes', apiname: 'TIME_SERIES_DAILY'},
+    { name: 'Daily Adjusted', description: 'Volume adjusted daily price quote', apiname: 'TIME_SERIES_DAILY_ADJUSTED' },
+    { name: 'Weekly', description: 'Weekly price quote', apiname: 'TIME_SERIES_WEEKLY' },
+    { name: 'Weekly Adjusted', description: 'Volume adjusted weekly price quote', apiname: 'TIME_SERIES_WEEKLY_ADJUSTED' },
+    { name: 'Monthly', description: 'Monthly price quotes', apiname: 'TIME_SERIES_MONTHLY' },
+    { name: 'Monthly Adjusted', description: 'Volume adjusted monthly price quote', apiname: 'TIME_SERIES_MONTHLY_ADJUSTED' },
+    { name: 'Quote Endpoint', description: 'Endpoint price quote', apiname: 'GLOBAL_QUOTE' }
+  ];
+
+  numControl = new FormControl('', Validators.required);
+  selectNumControl = new FormControl('', Validators.required);
+  numbers: num[] = [
+    { value: 1 }, { value: 5 }, { value: 15 }, { value: 30 }, { value: 60 }
+  ]
+
+  log(sometxt: string) {
+    console.log(sometxt);
+  }
+
+  public getSym() {
+    //freq: string, sym: string, length: string, interval: number
+    this.marketService.getTimeSeries(this.quoteControl.value.apiname, this.myControl.value.symbol, "full", this.numControl.value.value);
+  }
+
   ngOnInit(): void {
     this.filteredOptions = this.myControl.valueChanges
       .pipe(

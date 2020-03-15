@@ -32,18 +32,17 @@ export class GetmarketserviceService {
     });
   }
 
-  public getTimeSeries(freq: string, sym: string, length: string): Observable<any> {
-    let url = this.baseURL + freq + "&symbol=" + sym + "&outputsize=" + length + "&apikey=" + this.config.apikey;
+  public getTimeSeries(freq: string, sym: string, length: string, interval: number): Observable<any> {
+    var url: string;
+    if (freq == "TIME_SERIES_INTRADAY") {
+      url = this.baseURL + freq + "&symbol=" + sym + "&interval=" + interval + "min&outputsize=" + length + "&apikey=" + this.config.apikey;
+    } else {
+        url = this.baseURL + freq + "&symbol=" + sym + "&outputsize=" + length + "&apikey=" + this.config.apikey;
+    }
+    console.log(url);
     return this.http.get<any>(url)
       .pipe(catchError(this.handleError('getTimeSeries', [])));
   }
-
-  public getSearchSYM(sym: string) {
-    let url = "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=" + sym + "&apikey=" + "PFTLU0XO3SLF2S5J";
-    return this.http.get<any>(url)
-      .pipe(catchError(this.handleError('getTimeSeries', [])));
-  }
-
 
   //#region "Error handlers"
   private handleError<T>(operation = 'operation', result?: T) {

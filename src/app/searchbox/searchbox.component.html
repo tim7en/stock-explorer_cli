@@ -1,3 +1,31 @@
+<mat-form-field>
+  <mat-label>Frequency of observations</mat-label>
+  <mat-select [formControl]="quoteControl" required>
+    <mat-option>--</mat-option>
+    <mat-option *ngFor="let quote of quotes" [value]="quote">
+      {{quote.name}}
+    </mat-option>
+  </mat-select>
+  <mat-error *ngIf="quoteControl.hasError('required')">Please choose frequency</mat-error>
+  <mat-hint>{{quoteControl.value?.description}}</mat-hint>
+</mat-form-field>
+<br />
+<br />
+<div *ngIf="quoteControl.value.name == 'Intraday'">
+  <mat-form-field>
+    <mat-label>Intraday variation</mat-label>
+    <mat-select [formControl]="numControl" required>
+      <mat-option *ngFor="let num of numbers" [value]="num">
+        {{num.value}}
+      </mat-option>
+    </mat-select>
+
+  </mat-form-field>
+</div>
+
+<br />
+<br />
+
 <form class="example-form">
   <mat-form-field class="example-full-width">
     <mat-label>Search</mat-label>
@@ -10,3 +38,4 @@
     </mat-autocomplete>
   </mat-form-field>
 </form>
+<button mat-stroked-button (click)="getSym()">Search!</button>
