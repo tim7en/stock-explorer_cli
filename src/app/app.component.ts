@@ -16,6 +16,6 @@ export class AppComponent {
   title = 'stock-explorer';
 
   public getSym() {
-    this.marketService.getTimeSeries("TIME_SERIES_DAILY", "MSFT", "full");
+    this.marketService.getTimeSeries("TIME_SERIES_DAILY_ADJUSTED", "MSFT", "full");
   }
 }

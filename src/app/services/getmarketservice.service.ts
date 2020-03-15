@@ -14,13 +14,13 @@ export class GetmarketserviceService {
 
   public get baseURL() { return "https://www.alphavantage.co/query?function="; }
   private messager: ToastrService;
+
+  public config: Config;
+  configUrl = 'assets/config.json';
+
   constructor(private http: HttpClient) {
     this.showConfig();
   }
-  private config: Config;
-
-
-  configUrl = 'assets/config.json';
 
   getConfig() {
     return this.http.get<Config>(this.configUrl);
@@ -28,19 +28,22 @@ export class GetmarketserviceService {
 
   showConfig() {
     this.getConfig().subscribe((data: Config) => this.config = {
-      apikey: data['alphavantageAPIKey'],
+      apikey: data['alphavantageAPIKey']
     });
   }
 
-  //https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=MSFT&outputsize=full&apikey=demo
-  //https://www.alphavantage.co/query?function=TIME_SERIES_DAILY$symbol=MSFT&outputsize=full&apikey=PFTLU0XO3SLF2S5J
-
   public getTimeSeries(freq: string, sym: string, length: string): Observable<any> {
     let url = this.baseURL + freq + "&symbol=" + sym + "&outputsize=" + length + "&apikey=" + this.config.apikey;
-    console.log(url);
     return this.http.get<any>(url)
       .pipe(catchError(this.handleError('getTimeSeries', [])));
   }
+
+  public getSearchSYM(sym: string) {
+    let url = "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=" + sym + "&apikey=" + "PFTLU0XO3SLF2S5J";
+    return this.http.get<any>(url)
+      .pipe(catchError(this.handleError('getTimeSeries', [])));
+  }
+
 
   //#region "Error handlers"
   private handleError<T>(operation = 'operation', result?: T) {
