@@ -7,15 +7,20 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchboxComponent } from './searchbox/searchbox.component';
 import { SearchboxModule } from './searchbox/searchbox.module';
-
+import { ViewComponent } from './view/view.component';
+import { ChartsModule } from 'ng2-charts';
+import { TileComponent } from './tile/tile.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SearchboxComponent
+    SearchboxComponent,
+    ViewComponent,
+    TileComponent
   ],
   imports: [
     BrowserModule,
+    ChartsModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,

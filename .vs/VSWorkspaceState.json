@@ -6,9 +6,8 @@
     "\\src\\app\\models",
     "\\src\\app\\searchbox",
     "\\src\\app\\services",
-    "\\src\\app\\shared",
     "\\src\\assets"
   ],
-  "SelectedNode": "\\src\\app\\searchbox\\searchbox.component.ts",
+  "SelectedNode": "\\src\\app\\services\\getmarketservice.service.ts",
   "PreviewInSolutionExplorer": false
 }

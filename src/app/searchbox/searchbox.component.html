@@ -9,8 +9,7 @@
   <mat-error *ngIf="quoteControl.hasError('required')">Please choose frequency</mat-error>
   <mat-hint>{{quoteControl.value?.description}}</mat-hint>
 </mat-form-field>
-<br />
-<br />
+
 <div *ngIf="quoteControl.value.name == 'Intraday'">
   <mat-form-field>
     <mat-label>Intraday variation</mat-label>
@@ -23,14 +22,11 @@
   </mat-form-field>
 </div>
 
-<br />
-<br />
-
 <form class="example-form">
   <mat-form-field class="example-full-width">
     <mat-label>Search</mat-label>
     <input type="text" matInput [formControl]="myControl" [matAutocomplete]="auto">
-    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)='assign($event.option.value)'>
       <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
         {{option.name}} |
         {{option.symbol}}
@@ -38,4 +34,3 @@
     </mat-autocomplete>
   </mat-form-field>
 </form>
-<button mat-stroked-button (click)="getSym()">Search!</button>
